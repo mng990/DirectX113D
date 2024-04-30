@@ -73,7 +73,7 @@ using namespace Microsoft::WRL;
 #include "IExecute.h"
 #include "Pass.h"
 
-//#include "GameObject.h"
-//#include "Transform.h"
-//#include "Texture.h"
+#include "GameObject.h"
+#include "Transform.h"
+#include "Texture.h"
 //#include "Mesh.h"

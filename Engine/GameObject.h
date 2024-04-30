@@ -10,7 +10,7 @@ class Animator;
 class GameObject : public enable_shared_from_this<GameObject>
 {
 public:
-	GameObject(ComPtr<ID3D11Device> device, ComPtr<ID3D11DeviceContext> deviceContext);
+	GameObject();
 	~GameObject();
 
 	void Awake();
@@ -22,8 +22,8 @@ public:
 	shared_ptr<Component> GetFixedComponent(ComponentType type);
 	shared_ptr<Transform> GetTransform();
 	shared_ptr<Camera> GetCamera();
-	shared_ptr<MeshRenderer> GetMeshRenderer();
-	shared_ptr<Animator> GetAnimator();
+	//shared_ptr<MeshRenderer> GetMeshRenderer();
+	//shared_ptr<Animator> GetAnimator();
 
 	shared_ptr<Transform> GetOrAddTransform();
 

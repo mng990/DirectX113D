@@ -7,7 +7,7 @@
 //#include "Animator.h"
 
 
-GameObject::GameObject(ComPtr<ID3D11Device> device, ComPtr<ID3D11DeviceContext> deviceContext)
+GameObject::GameObject()
 {
 	
 }
@@ -103,6 +103,7 @@ shared_ptr<Camera> GameObject::GetCamera()
 	return static_pointer_cast<Camera>(component);
 }
 
+/*
 shared_ptr<MeshRenderer> GameObject::GetMeshRenderer()
 {
 	shared_ptr<Component> component = GetFixedComponent(ComponentType::MeshRenderer);
@@ -114,7 +115,7 @@ shared_ptr<Animator> GameObject::GetAnimator()
 	shared_ptr<Component> component = GetFixedComponent(ComponentType::Animator);
 	return static_pointer_cast<Animator>(component);
 }
-
+*/
 shared_ptr<Transform> GameObject::GetOrAddTransform()
 {
 	if (GetTransform() == nullptr) 

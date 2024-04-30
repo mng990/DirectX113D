@@ -66,14 +66,8 @@
     <ClCompile Include="..\..\..\..\..\A-01)+프로젝트+설정\Engine\VertexBuffer.cpp">
       <Filter>01. Graphics\Buffer</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\..\..\A-01)+프로젝트+설정\Engine\IndexBuffer.cpp">
-      <Filter>01. Graphics\Buffer</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\..\..\A-01)+프로젝트+설정\Engine\VertexData.cpp">
       <Filter>01. Graphics\Buffer</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\..\..\A-01)+프로젝트+설정\Engine\Shader.cpp">
-      <Filter>01. Graphics\Shader</Filter>
     </ClCompile>
     <ClCompile Include="Pass.cpp">
       <Filter>01. Graphics\Shader</Filter>
@@ -86,9 +80,6 @@
     </ClCompile>
     <ClCompile Include="Technique.cpp">
       <Filter>01. Graphics\Shader</Filter>
-    </ClCompile>
-    <ClCompile Include="Texture.cpp">
-      <Filter>00. Engine\Resource</Filter>
     </ClCompile>
     <ClCompile Include="Graphics.cpp">
       <Filter>02. Manager</Filter>
@@ -110,6 +101,15 @@
     </ClCompile>
     <ClCompile Include="Camera.cpp">
       <Filter>04. Component</Filter>
+    </ClCompile>
+    <ClCompile Include="Shader.cpp">
+      <Filter>01. Graphics\Shader</Filter>
+    </ClCompile>
+    <ClCompile Include="Texture.cpp">
+      <Filter>00. Engine\Resource</Filter>
+    </ClCompile>
+    <ClCompile Include="IndexBuffer.cpp">
+      <Filter>01. Graphics\Buffer</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -155,14 +155,8 @@
     <ClInclude Include="..\..\..\..\..\A-01)+프로젝트+설정\Engine\VertexBuffer.h">
       <Filter>01. Graphics\Buffer</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\..\..\A-01)+프로젝트+설정\Engine\IndexBuffer.h">
-      <Filter>01. Graphics\Buffer</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\..\..\A-01)+프로젝트+설정\Engine\VertexData.h">
       <Filter>01. Graphics\Buffer</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\..\..\A-01)+프로젝트+설정\Engine\Shader.h">
-      <Filter>01. Graphics\Shader</Filter>
     </ClInclude>
     <ClInclude Include="Pass.h">
       <Filter>01. Graphics\Shader</Filter>
@@ -175,9 +169,6 @@
     </ClInclude>
     <ClInclude Include="Technique.h">
       <Filter>01. Graphics\Shader</Filter>
-    </ClInclude>
-    <ClInclude Include="Texture.h">
-      <Filter>00. Engine\Resource</Filter>
     </ClInclude>
     <ClInclude Include="Graphics.h">
       <Filter>02. Manager</Filter>
@@ -199,6 +190,15 @@
     </ClInclude>
     <ClInclude Include="Camera.h">
       <Filter>04. Component</Filter>
+    </ClInclude>
+    <ClInclude Include="Shader.h">
+      <Filter>01. Graphics\Shader</Filter>
+    </ClInclude>
+    <ClInclude Include="Texture.h">
+      <Filter>00. Engine\Resource</Filter>
+    </ClInclude>
+    <ClInclude Include="IndexBuffer.h">
+      <Filter>01. Graphics\Buffer</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
