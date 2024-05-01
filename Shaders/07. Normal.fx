@@ -35,6 +35,8 @@ VertexOutput VS(VertexInput input)
 // Filter = 확대 / 축소가 일어났을 때 중간 값을 처리하는 방식
 // Address = UV가 1보다 컸을 때, 나머지 부분을 처리하는 방식
 
+SamplerState Sampler0;
+
 SamplerState SamplerAddressWrap
 {
     AddressU = Wrap;
@@ -46,7 +48,7 @@ float4 PS(VertexOutput input) : SV_TARGET
     float3 normal = normalize(input.normal);
     float3 light = -LightDir;
  
-    return float4(0.f, 1.f, 0.f, 1.f) * dot(light, normal);
+    return Texture0.Sample(Sampler0, input.uv) * dot(light, normal);
 }
 
 RasterizerState FillModeWireFrame

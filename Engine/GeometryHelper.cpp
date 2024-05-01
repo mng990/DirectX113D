@@ -267,6 +267,35 @@ void GeometryHelper::CreateGrid(shared_ptr<Geometry<VertexTextureData>> geometry
 	geometry->SetIndices(idx);
 }
 
+void GeometryHelper::CreateQuad(shared_ptr<Geometry<VertexTextureNormalData>> geometry)
+{
+	vector<VertexTextureNormalData> vtx;
+	vtx.resize(4);
+
+	vtx[0].position = Vec3(-0.5f, -0.5f, 0.f);
+	vtx[0].uv = Vec2(0.f, 1.f);
+	vtx[0].normal = Vec3(0.f, 0.f, 1.f);
+
+	vtx[1].position = Vec3(-0.5f, 0.5f, 0.f);
+	vtx[1].uv = Vec2(0.f, 0.f);
+	vtx[1].normal = Vec3(0.f, 0.f, 1.f);
+
+
+	vtx[2].position = Vec3(0.5f, -0.5f, 0.f);
+	vtx[2].uv = Vec2(1.f, 1.f);
+	vtx[2].normal = Vec3(0.f, 0.f, 1.f);
+
+
+	vtx[3].position = Vec3(0.5f, 0.5f, 0.f);
+	vtx[3].uv = Vec2(1.f, 0.f);
+	vtx[3].normal = Vec3(0.f, 0.f, 1.f);
+
+	geometry->SetVertices(vtx);
+
+	vector<uint32> indices = { 0, 1, 2, 2, 1, 3 };
+	geometry->SetIndices(indices);
+}
+
 void GeometryHelper::CreateCube(shared_ptr<Geometry<VertexTextureNormalData>> geometry)
 {
 	float w2 = 0.5f;

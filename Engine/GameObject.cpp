@@ -3,7 +3,7 @@
 #include "Camera.h"
 #include "GameObject.h"
 #include "Transform.h"
-//#include "MeshRenderer.h"
+#include "MeshRenderer.h"
 //#include "Animator.h"
 
 
@@ -101,6 +101,12 @@ shared_ptr<Camera> GameObject::GetCamera()
 {
 	shared_ptr<Component> component = GetFixedComponent(ComponentType::Camera);
 	return static_pointer_cast<Camera>(component);
+}
+
+shared_ptr<MeshRenderer> GameObject::GetMeshRenderer()
+{
+	shared_ptr<Component> component = GetFixedComponent(ComponentType::MeshRenderer);
+	return static_pointer_cast<MeshRenderer>(component);
 }
 
 /*
