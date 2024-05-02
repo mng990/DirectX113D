@@ -49,6 +49,14 @@ struct VertexTextureNormal
     float3 normal : NORMAL;
 };
 
+struct VertexTextureTangentNormal
+{
+    float4 position : POSITION;
+    float2 uv : TEXCOORD;
+    float3 normal : NORMAL;
+    float3 tangent : TANGENT;
+};
+
 
 /////////////////
 //Vertex Output//
@@ -68,6 +76,7 @@ struct MeshOutput
     float3 worldPosition : POSITION1;
     float2 uv : TEXCOORD;
     float3 normal : NORMAL;
+    float3 tangent : TANGENT;
 };
 
 
@@ -121,6 +130,14 @@ float3 CameraPosition()
 {
     return -V._41_42_43;
 }
+
+
+///////////
+// Const //
+///////////
+
+static const float PI = 3.14159265f;
+
 
 #endif
 

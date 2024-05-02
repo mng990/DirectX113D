@@ -74,14 +74,21 @@ float4 ComputeLight(float3 normal, float2 uv, float3 worldPosition)
     
     // Specular
     {
-        float3 R = GlobalLight.direction - (2 * normal * dot(GlobalLight.direction, normal));
+        float3 R = reflect(normalize(GlobalLight.direction), normal);
+        //float3 R = GlobalLight.direction - (2 * normal * dot(GlobalLight.direction, normal));
+
+        
         R = normalize(R);
         
         float3 cameraPosition = CameraPosition();
         float3 E = normalize(cameraPosition - worldPosition);
         
         float value = saturate(dot(R, E));
-        float specular = pow(value, 10);
+        
+        float theta = acos(dot(normalize(GlobalLight.direction), normal));
+        if (theta <= 0.75 * PI) value = 0.0f;
+        
+        float specular = pow(value, 64);
         
         specularColor = GlobalLight.specular * Material.specular * specular;
     }
@@ -101,7 +108,27 @@ float4 ComputeLight(float3 normal, float2 uv, float3 worldPosition)
     }
     
 
-        return ambientColor + diffuseColor + specularColor + emissiveColor;
+    return (ambientColor + diffuseColor + specularColor + emissiveColor);
+}
+
+
+void ComputeNormalMapping(inout float3 normal, float3 tangent, float2 uv)
+{
+    // [0, 255] -> [0, 1]
+    float4 map = NormalMap.Sample(LinearSampler, uv);
+
+    if (any(map.rgb) == false) return;
+    
+    float3 N = normalize(normal);
+    float3 T = normalize(tangent);
+    float3 B = normalize(cross(N, T));
+    float3x3 TBN = float3x3(T, B, N); // TS -> WS
+    
+    // [0, 1] -> [-1, 1]       
+    float3 tangentSpaceNormal = (map.rgb * 2.0f - 1);
+    float3 worldNormal = mul(tangentSpaceNormal, TBN);
+    
+    normal = worldNormal;
 }
 
 
