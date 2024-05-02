@@ -8,6 +8,7 @@ struct GlobalDesc
 	Matrix V = Matrix::Identity;
 	Matrix P = Matrix::Identity;
 	Matrix VP = Matrix::Identity;
+	Matrix VInv = Matrix::Identity;
 };
 
 struct TransformDesc
@@ -31,7 +32,7 @@ struct MaterialDesc
 {
 	Color ambient = Color(0.f, 0.f, 0.f, 1.f);
 	Color diffuse = Color(1.f, 1.f, 1.f, 1.f);
-	Color specular = Color(0.f, 0.f, 0.f, 1.f);
+	Color specular = Color(1.f, 1.f, 1.f, 1.f);
 	Color emissive = Color(0.f, 0.f, 0.f, 1.f);
 };
 

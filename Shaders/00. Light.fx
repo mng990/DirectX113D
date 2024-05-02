@@ -108,7 +108,7 @@ float4 ComputeLight(float3 normal, float2 uv, float3 worldPosition)
     }
     
 
-    return (ambientColor + diffuseColor + specularColor + emissiveColor);
+    return ambientColor + diffuseColor + specularColor + emissiveColor;
 }
 
 

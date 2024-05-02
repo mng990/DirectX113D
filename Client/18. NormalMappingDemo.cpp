@@ -18,11 +18,11 @@ void NormalMappingDemo::Init()
 			material->SetShader(_shader);
 		}
 		{
-			shared_ptr<Texture> texture = RESOURCES->Load<Texture>(L"Wood", L"..\\Resources\\Textures\\Wood.jpg");
+			shared_ptr<Texture> texture = RESOURCES->Load<Texture>(L"Leather", L"..\\Resources\\Textures\\Leather.jpg");
 			material->SetDiffuseMap(texture);
 		}
 		{
-			shared_ptr<Texture> texture = RESOURCES->Load<Texture>(L"WoodNomal", L"..\\Resources\\Textures\\Wood_Normal.jpg");
+			shared_ptr<Texture> texture = RESOURCES->Load<Texture>(L"LeatherNomal", L"..\\Resources\\Textures\\Leather_Normal.jpg");
 			material->SetNormalMap(texture);
 		}
 
@@ -30,8 +30,9 @@ void NormalMappingDemo::Init()
 		desc.ambient = Vec4(1.f);
 		desc.diffuse = Vec4(1.f);
 		desc.specular = Vec4(1.f);
+		desc.emissive = Vec4(0.f);
 
-		RESOURCES->Add(L"Wood", material);
+		RESOURCES->Add(L"Leather", material);
 	}
 
 	// Camera
@@ -51,7 +52,7 @@ void NormalMappingDemo::Init()
 		_obj->GetMeshRenderer()->SetMesh(mesh);
 	}
 	{
-		shared_ptr<Material> material = RESOURCES->Get<Material>(L"Wood");
+		shared_ptr<Material> material = RESOURCES->Get<Material>(L"Leather");
 		_obj->GetMeshRenderer()->SetMaterial(material);
 	}
 	
@@ -66,7 +67,7 @@ void NormalMappingDemo::Init()
 		_obj2->GetMeshRenderer()->SetMesh(mesh);
 	}
 	{
-		shared_ptr<Material> material = RESOURCES->Get<Material>(L"Wood");
+		shared_ptr<Material> material = RESOURCES->Get<Material>(L"Leather");
 		_obj2->GetMeshRenderer()->SetMaterial(material);
 	}
 
@@ -84,7 +85,7 @@ void NormalMappingDemo::Update()
 		lightDesc.diffuse = Vec4(0.8f);
 		lightDesc.specular = Vec4(1.f);
 		lightDesc.direction = Vec3(1.f, 0.f, 1.f);
-		lightDesc.emissive = Vec4(0.f);
+		lightDesc.emissive = Vec4(0.f, 0.f, 1.f, 1.f);
 
 		RENDER->PushLightData(lightDesc);
 	}

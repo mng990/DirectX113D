@@ -10,6 +10,7 @@ cbuffer GlobalBuffer
     matrix V;  // View
     matrix P;  // Projection
     matrix VP; // (View * Projection)
+    matrix VInv; // View Inverse
 };
 
 cbuffer TransformBuffer
@@ -128,7 +129,7 @@ pass name                                         \
 
 float3 CameraPosition()
 {
-    return -V._41_42_43;
+    return VInv._41_42_43;
 }
 
 
