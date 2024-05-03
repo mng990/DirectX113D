@@ -31,6 +31,9 @@
     <Filter Include="99. Header">
       <UniqueIdentifier>{8cb8064e-32bc-4ac0-a237-2e2908bb909f}</UniqueIdentifier>
     </Filter>
+    <Filter Include="00. Engine\Resource\Model">
+      <UniqueIdentifier>{1f9955e5-4543-4164-b9a1-15ba162af7e4}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp">
@@ -122,6 +125,18 @@
     </ClCompile>
     <ClCompile Include="VertexBuffer.cpp">
       <Filter>01. Graphics\Buffer</Filter>
+    </ClCompile>
+    <ClCompile Include="FileUtils.cpp">
+      <Filter>98. Utils</Filter>
+    </ClCompile>
+    <ClCompile Include="Model.cpp">
+      <Filter>00. Engine\Resource\Model</Filter>
+    </ClCompile>
+    <ClCompile Include="ModelMesh.cpp">
+      <Filter>00. Engine\Resource\Model</Filter>
+    </ClCompile>
+    <ClCompile Include="ModelRenderer.cpp">
+      <Filter>04. Component</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -223,6 +238,18 @@
     </ClInclude>
     <ClInclude Include="VertexBuffer.h">
       <Filter>01. Graphics\Buffer</Filter>
+    </ClInclude>
+    <ClInclude Include="FileUtils.h">
+      <Filter>98. Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="Model.h">
+      <Filter>00. Engine\Resource\Model</Filter>
+    </ClInclude>
+    <ClInclude Include="ModelMesh.h">
+      <Filter>00. Engine\Resource\Model</Filter>
+    </ClInclude>
+    <ClInclude Include="ModelRenderer.h">
+      <Filter>04. Component</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

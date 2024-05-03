@@ -122,6 +122,14 @@ pass name                                         \
     SetPixelShader(CompileShader(ps_5_0, ps()));  \
 }
 
+#define PASS_VRP(name, vs, rs, ps)                \
+pass name                                         \
+{                                                 \
+    SetVertexShader(CompileShader(vs_5_0, vs())); \
+    SetRasterizerState(rs);                       \
+    SetPixelShader(CompileShader(ps_5_0, ps()));  \
+}
+
 
 //////////////
 // Function //

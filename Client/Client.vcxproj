@@ -87,6 +87,7 @@
     <FxCompile Include="..\Shaders\13. Lighting.fx" />
     <FxCompile Include="..\Shaders\14. Material.fx" />
     <FxCompile Include="..\Shaders\15. NormalMapping.fx" />
+    <FxCompile Include="..\Shaders\16. ModelDemo.fx" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>17.0</VCProjectVersion>

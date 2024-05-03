@@ -4,6 +4,7 @@
 #include "GameObject.h"
 #include "Transform.h"
 #include "MeshRenderer.h"
+#include "ModelRenderer.h"
 //#include "Animator.h"
 
 
@@ -109,12 +110,13 @@ shared_ptr<MeshRenderer> GameObject::GetMeshRenderer()
 	return static_pointer_cast<MeshRenderer>(component);
 }
 
-/*
-shared_ptr<MeshRenderer> GameObject::GetMeshRenderer()
+shared_ptr<ModelRenderer> GameObject::GetModelRenderer()
 {
-	shared_ptr<Component> component = GetFixedComponent(ComponentType::MeshRenderer);
-	return static_pointer_cast<MeshRenderer>(component);
+	shared_ptr<Component> component = GetFixedComponent(ComponentType::ModelRenderer);
+	return static_pointer_cast<ModelRenderer>(component);
 }
+
+/*
 
 shared_ptr<Animator> GameObject::GetAnimator()
 {
