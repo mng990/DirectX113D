@@ -28,7 +28,7 @@ private:
 private:
 	shared_ptr<asAnimation> ReadAnimationData(aiAnimation* srcAnimation);
 	shared_ptr<asAnimationNode> ParseAnimationNode(shared_ptr<asAnimation> animation, aiNodeAnim* srcNode);
-	void ReadKeyframeData(shared_ptr<asAnimation> animation, aiNode* srcNode, map<string, shared_ptr<asAnimationNode>> cache);
+	void ReadKeyframeData(shared_ptr<asAnimation> animation, aiNode* srcNode, map<string, shared_ptr<asAnimationNode>>& cache);
 	void WriteAnimationData(shared_ptr<asAnimation> animation, wstring finalPath);
 
 

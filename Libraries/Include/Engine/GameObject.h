@@ -6,7 +6,7 @@ class Transform;
 class MonoBehavior;
 class MeshRenderer;
 class ModelRenderer;
-class Animator;
+class ModelAnimator;
 
 class GameObject : public enable_shared_from_this<GameObject>
 {
@@ -25,6 +25,7 @@ public:
 	shared_ptr<Camera> GetCamera();
 	shared_ptr<MeshRenderer> GetMeshRenderer();
 	shared_ptr<ModelRenderer> GetModelRenderer();
+	shared_ptr<ModelAnimator> GetModelAnimator();
 	//shared_ptr<Animator> GetAnimator();
 
 	shared_ptr<Transform> GetOrAddTransform();

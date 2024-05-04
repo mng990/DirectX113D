@@ -59,6 +59,17 @@ struct VertexTextureTangentNormal
 };
 
 
+struct VertexTextureTangentNormalBlend
+{
+    float4 position : POSITION;
+    float2 uv : TEXCOORD;
+    float3 normal : NORMAL;
+    float3 tangent : TANGENT;
+    float4 blendIndices : BLENDINDICES;
+    float4 blendWeight : BLENDWEIGHT;
+};
+
+
 /////////////////
 //Vertex Output//
 /////////////////

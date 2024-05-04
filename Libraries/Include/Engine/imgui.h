@@ -14,7 +14,8 @@
 // - Wiki ....................... https://github.com/ocornut/imgui/wiki (lots of good stuff there)
 //   - Getting Started            https://github.com/ocornut/imgui/wiki/Getting-Started (how to integrate in an existing app by adding ~25 lines of code)
 //   - Third-party Extensions     https://github.com/ocornut/imgui/wiki/Useful-Extensions (ImPlot & many more)
-//   - Bindings/Backends          https://github.com/ocornut/imgui/wiki/Bindings (language bindings, backends for various tech/engines)
+//   - 
+// ings/Backends          https://github.com/ocornut/imgui/wiki/Bindings (language bindings, backends for various tech/engines)
 //   - Glossary                   https://github.com/ocornut/imgui/wiki/Glossary
 //   - Debug Tools                https://github.com/ocornut/imgui/wiki/Debug-Tools
 //   - Software using Dear ImGui  https://github.com/ocornut/imgui/wiki/Software-using-dear-imgui

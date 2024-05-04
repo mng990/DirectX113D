@@ -1,14 +1,14 @@
 #include "pch.h"
 #include "Converter.h"
 #include <filesystem>
-#include "tinyxml2.h"
 #include "Utils.h"
+#include "tinyxml2.h"
 #include "FileUtils.h"
-
 
 Converter::Converter()
 {
 	_importer = make_shared<Assimp::Importer>();
+
 }
 
 Converter::~Converter()
@@ -33,7 +33,6 @@ void Converter::ReadAssetFile(wstring file)
 	);
 
 	assert(_scene != nullptr);
-
 }
 
 void Converter::ExportModelData(wstring savePath)
@@ -41,7 +40,41 @@ void Converter::ExportModelData(wstring savePath)
 	wstring finalPath = _modelPath + savePath + L".mesh";
 	ReadModelData(_scene->mRootNode, -1, -1);
 	ReadSkinData();
-	WriteCSVFile();
+
+	//Write CSV File
+	{
+		FILE* file;
+		::fopen_s(&file, "../Vertices.csv", "w");
+
+		for (shared_ptr<asBone>& bone : _bones)
+		{
+			string name = bone->name;
+			::fprintf(file, "%d,%s\n", bone->index, bone->name.c_str());
+		}
+
+		::fprintf(file, "\n");
+
+		for (shared_ptr<asMesh>& mesh : _meshes)
+		{
+			string name = mesh->name;
+			::printf("%s\n", name.c_str());
+
+			for (UINT i = 0; i < mesh->vertices.size(); i++)
+			{
+				Vec3 p = mesh->vertices[i].position;
+				Vec4 indices = mesh->vertices[i].blendIndices;
+				Vec4 weights = mesh->vertices[i].blendWeights;
+
+				::fprintf(file, "%f,%f,%f,", p.x, p.y, p.z);
+				::fprintf(file, "%f,%f,%f,%f,", indices.x, indices.y, indices.z, indices.w);
+				::fprintf(file, "%f,%f,%f,%f\n", weights.x, weights.y, weights.z, weights.w);
+			}
+		}
+
+		::fclose(file);
+	}
+
+
 	WriteModelFile(finalPath);
 }
 
@@ -52,7 +85,7 @@ void Converter::ExportMaterialData(wstring savePath)
 	WriteMaterialData(finalPath);
 }
 
-void Converter::ExportAnimationData(wstring savePath, uint32 index)
+void Converter::ExportAnimationData(wstring savePath, uint32 index /*= 0*/)
 {
 	wstring finalPath = _modelPath + savePath + L".clip";
 	assert(index < _scene->mNumAnimations);
@@ -67,93 +100,46 @@ void Converter::ReadModelData(aiNode* node, int32 index, int32 parent)
 	bone->parent = parent;
 	bone->name = node->mName.C_Str();
 
-
 	// Relative Transform
 	Matrix transform(node->mTransformation[0]);
 	bone->transform = transform.Transpose();
 
-	// Local(Root) Matrix 
-	// RMD(node, parent, grandParent)에서 이미 로컬로 변환된 좌표)
+	// 2) Root (Local)
 	Matrix matParent = Matrix::Identity;
-	if (parent >= 0) matParent = _bones[parent]->transform;
+	if (parent >= 0)
+		matParent = _bones[parent]->transform;
 
 	// Local (Root) Transform
 	bone->transform = bone->transform * matParent;
-	
+
 	_bones.push_back(bone);
-	
+
 	// Mesh
 	ReadMeshData(node, index);
 
-	for (uint32 i = 0; i < node->mNumChildren; i++) 
-	{
+	// 재귀 함수
+	for (uint32 i = 0; i < node->mNumChildren; i++)
 		ReadModelData(node->mChildren[i], _bones.size(), index);
-	}
-}
-
-void Converter::ReadMaterialData()
-{
-
-	for (uint32 i = 0; i < _scene->mNumMaterials; i++)
-	{
-		aiMaterial* srcMaterial = _scene->mMaterials[i];
-
-		shared_ptr<asMaterial> material = make_shared<asMaterial>();
-		material->name = srcMaterial->GetName().C_Str();
-
-
-		aiColor3D color;
-		//Ambient
-		srcMaterial->Get(AI_MATKEY_COLOR_AMBIENT, color);
-		material->ambient = Color(color.r, color.g, color.b, 1.f);
-
-		// Diffuse
-		srcMaterial->Get(AI_MATKEY_COLOR_DIFFUSE, color);
-		material->diffuse = Color(color.r, color.g, color.b, 1.f);
-
-		// Specular
-		srcMaterial->Get(AI_MATKEY_COLOR_SPECULAR, color);
-		material->specular = Color(color.r, color.g, color.b, 1.f);
-
-		// Emissive
-		srcMaterial->Get(AI_MATKEY_COLOR_EMISSIVE, color);
-		material->emissive = Color(color.r, color.g, color.b, 1.f);
-		srcMaterial->Get(AI_MATKEY_SHININESS, material->emissive.w);
-
-
-		aiString file;
-		// Diffuse Texture
-		srcMaterial->GetTexture(aiTextureType_DIFFUSE, 0, &file);
-		material->diffuseFile = file.C_Str();
-
-		// Specular Texture
-		srcMaterial->GetTexture(aiTextureType_SPECULAR, 0, &file);
-		material->specularFile = file.C_Str();
-		
-		// Normal Texture
-		srcMaterial->GetTexture(aiTextureType_NORMALS, 0, &file);
-		material->normalFile = file.C_Str();
-
-		_materials.push_back(material);
-	}
 }
 
 void Converter::ReadMeshData(aiNode* node, int32 bone)
 {
-	if (node->mNumMeshes < 1) return;
+	if (node->mNumMeshes < 1)
+		return;
 
 	shared_ptr<asMesh> mesh = make_shared<asMesh>();
 	mesh->name = node->mName.C_Str();
 	mesh->boneIndex = bone;
-
 
 	for (uint32 i = 0; i < node->mNumMeshes; i++)
 	{
 		uint32 index = node->mMeshes[i];
 		const aiMesh* srcMesh = _scene->mMeshes[index];
 
-		mesh->materialName = _scene->mMaterials[srcMesh->mMaterialIndex]->GetName().C_Str();
-		
+		// Material Name
+		const aiMaterial* material = _scene->mMaterials[srcMesh->mMaterialIndex];
+		mesh->materialName = material->GetName().C_Str();
+
 		const uint32 startVertex = mesh->vertices.size();
 
 		for (uint32 v = 0; v < srcMesh->mNumVertices; v++)
@@ -165,27 +151,21 @@ void Converter::ReadMeshData(aiNode* node, int32 bone)
 			// UV
 			if (srcMesh->HasTextureCoords(0))
 				::memcpy(&vertex.uv, &srcMesh->mTextureCoords[0][v], sizeof(Vec2));
-			
+
 			// Normal
 			if (srcMesh->HasNormals())
 				::memcpy(&vertex.normal, &srcMesh->mNormals[v], sizeof(Vec3));
-			
-			// Tangent
-// 			if (srcMesh->HasTangentsAndBitangents())
-// 				::memcpy(&vertex.tangent, &srcMesh->mTangents[v], sizeof(Vec3));
 
 			mesh->vertices.push_back(vertex);
 		}
-		
+
 		// Index
 		for (uint32 f = 0; f < srcMesh->mNumFaces; f++)
 		{
 			aiFace& face = srcMesh->mFaces[f];
 
 			for (uint32 k = 0; k < face.mNumIndices; k++)
-			{
 				mesh->indices.push_back(face.mIndices[k] + startVertex);
-			}
 		}
 	}
 
@@ -197,14 +177,15 @@ void Converter::ReadSkinData()
 	for (uint32 i = 0; i < _scene->mNumMeshes; i++)
 	{
 		aiMesh* srcMesh = _scene->mMeshes[i];
-		if (srcMesh->HasBones() == false) continue;
+		if (srcMesh->HasBones() == false)
+			continue;
 
 		shared_ptr<asMesh> mesh = _meshes[i];
 
 		vector<asBoneWeights> tempVertexBoneWeights;
 		tempVertexBoneWeights.resize(mesh->vertices.size());
 
-		// Bone을 순회하며 연관된 VertexId, Weight를 구해서 기록
+		// Bone을 순회하면서 연관된 VertexId, Weight를 구해서 기록한다.
 		for (uint32 b = 0; b < srcMesh->mNumBones; b++)
 		{
 			aiBone* srcMeshBone = srcMesh->mBones[b];
@@ -214,13 +195,11 @@ void Converter::ReadSkinData()
 			{
 				uint32 index = srcMeshBone->mWeights[w].mVertexId;
 				float weight = srcMeshBone->mWeights[w].mWeight;
-
 				tempVertexBoneWeights[index].AddWeights(boneIndex, weight);
 			}
 		}
 
 		// 최종 결과 계산
-
 		for (uint32 v = 0; v < tempVertexBoneWeights.size(); v++)
 		{
 			tempVertexBoneWeights[v].Normalize();
@@ -236,15 +215,15 @@ void Converter::WriteModelFile(wstring finalPath)
 {
 	auto path = filesystem::path(finalPath);
 
+	// 폴더가 없으면 만든다.
 	filesystem::create_directory(path.parent_path());
 
-	// 폴더가 없으면 만든다.
 	shared_ptr<FileUtils> file = make_shared<FileUtils>();
 	file->Open(finalPath, FileMode::Write);
 
-	//Bone data
+	// Bone Data
 	file->Write<uint32>(_bones.size());
-	for (shared_ptr<asBone> bone : _bones) 
+	for (shared_ptr<asBone>& bone : _bones)
 	{
 		file->Write<int32>(bone->index);
 		file->Write<string>(bone->name);
@@ -260,54 +239,66 @@ void Converter::WriteModelFile(wstring finalPath)
 		file->Write<int32>(meshData->boneIndex);
 		file->Write<string>(meshData->materialName);
 
-		//Vertex Data
+		// Vertex Data
 		file->Write<uint32>(meshData->vertices.size());
 		file->Write(&meshData->vertices[0], sizeof(VertexType) * meshData->vertices.size());
-		
-		//Index Data
+
+		// Index Data
 		file->Write<uint32>(meshData->indices.size());
 		file->Write(&meshData->indices[0], sizeof(uint32) * meshData->indices.size());
 	}
 }
 
-void Converter::WriteCSVFile()
+void Converter::ReadMaterialData()
 {
-	FILE* file;
-	::fopen_s(&file, "../Vertices.csv", "w");
-
-	for (shared_ptr<asBone>& bone : _bones)
+	for (uint32 i = 0; i < _scene->mNumMaterials; i++)
 	{
-		string name = bone->name;
-		::fprintf(file, "%d,%s\n", bone->index, bone->name.c_str());
+		aiMaterial* srcMaterial = _scene->mMaterials[i];
+
+		shared_ptr<asMaterial> material = make_shared<asMaterial>();
+		material->name = srcMaterial->GetName().C_Str();
+
+		aiColor3D color;
+		// Ambient
+		srcMaterial->Get(AI_MATKEY_COLOR_AMBIENT, color);
+		material->ambient = Color(color.r, color.g, color.b, 1.f);
+
+		// Diffuse
+		srcMaterial->Get(AI_MATKEY_COLOR_DIFFUSE, color);
+		material->diffuse = Color(color.r, color.g, color.b, 1.f);
+
+		// Specular
+		srcMaterial->Get(AI_MATKEY_COLOR_SPECULAR, color);
+		material->specular = Color(color.r, color.g, color.b, 1.f);
+		srcMaterial->Get(AI_MATKEY_SHININESS, material->specular.w);
+
+		// Emissive
+		srcMaterial->Get(AI_MATKEY_COLOR_EMISSIVE, color);
+		material->emissive = Color(color.r, color.g, color.b, 1.0f);
+
+		aiString file;
+
+		// Diffuse Texture
+		srcMaterial->GetTexture(aiTextureType_DIFFUSE, 0, &file);
+		material->diffuseFile = file.C_Str();
+
+		// Specular Texture
+		srcMaterial->GetTexture(aiTextureType_SPECULAR, 0, &file);
+		material->specularFile = file.C_Str();
+
+		// Normal Texture
+		srcMaterial->GetTexture(aiTextureType_NORMALS, 0, &file);
+		material->normalFile = file.C_Str();
+
+		_materials.push_back(material);
 	}
-
-	::fprintf(file, "\n");
-
-	for (shared_ptr<asMesh>& mesh : _meshes)
-	{
-		string name = mesh->name;
-		::printf("%s\n", name.c_str());
-
-		for (UINT i = 0; i < mesh->vertices.size(); i++)
-		{
-			Vec3 p = mesh->vertices[i].position;
-			Vec4 indices = mesh->vertices[i].blendIndices;
-			Vec4 weights = mesh->vertices[i].blendWeights;
-
-			::fprintf(file, "%f,%f,%f,", p.x, p.y, p.z);
-			::fprintf(file, "%f,%f,%f,%f,", indices.x, indices.y, indices.z, indices.w);
-			::fprintf(file, "%f,%f,%f,%f\n", weights.x, weights.y, weights.z, weights.w);
-		}
-	}
-
-	::fclose(file);
 }
 
 void Converter::WriteMaterialData(wstring finalPath)
 {
 	auto path = filesystem::path(finalPath);
 
-	// 폴더가 없으면 새로 생성
+	// 폴더가 없으면 만든다.
 	filesystem::create_directory(path.parent_path());
 
 	string folder = path.parent_path().string();
@@ -320,30 +311,28 @@ void Converter::WriteMaterialData(wstring finalPath)
 	tinyxml2::XMLElement* root = document->NewElement("Materials");
 	document->LinkEndChild(root);
 
-	for (shared_ptr<asMaterial> material : _materials) 
+	for (shared_ptr<asMaterial> material : _materials)
 	{
 		tinyxml2::XMLElement* node = document->NewElement("Material");
 		root->LinkEndChild(node);
 
 		tinyxml2::XMLElement* element = nullptr;
+
 		element = document->NewElement("Name");
-		element->SetText(WriteTexture(folder, material->name).c_str());
+		element->SetText(material->name.c_str());
 		node->LinkEndChild(element);
 
 		element = document->NewElement("DiffuseFile");
 		element->SetText(WriteTexture(folder, material->diffuseFile).c_str());
 		node->LinkEndChild(element);
 
-
 		element = document->NewElement("SpecularFile");
 		element->SetText(WriteTexture(folder, material->specularFile).c_str());
 		node->LinkEndChild(element);
 
-
 		element = document->NewElement("NormalFile");
 		element->SetText(WriteTexture(folder, material->normalFile).c_str());
 		node->LinkEndChild(element);
-
 
 		element = document->NewElement("Ambient");
 		element->SetAttribute("R", material->ambient.x);
@@ -382,22 +371,16 @@ std::string Converter::WriteTexture(string saveFolder, string file)
 	string fileName = filesystem::path(file).filename().string();
 	string folderName = filesystem::path(saveFolder).filename().string();
 
-	filesystem::create_directory(filesystem::path(saveFolder).parent_path());
-
-
 	const aiTexture* srcTexture = _scene->GetEmbeddedTexture(file.c_str());
 	if (srcTexture)
 	{
 		string pathStr = (filesystem::path(saveFolder) / fileName).string();
 
-		// 텍스처가 내장된 경우 
-		// 해당 파일과 동일한 텍스터를 새로 생성해 저장 (권장 X)
-
 		if (srcTexture->mHeight == 0)
 		{
- 			shared_ptr<FileUtils> file = make_shared<FileUtils>();
- 			file->Open(Utils::ToWString(pathStr), FileMode::Write);
- 			file->Write(srcTexture->pcData, srcTexture->mWidth);
+			shared_ptr<FileUtils> file = make_shared<FileUtils>();
+			file->Open(Utils::ToWString(pathStr), FileMode::Write);
+			file->Write(srcTexture->pcData, srcTexture->mWidth);
 		}
 		else
 		{
@@ -427,11 +410,11 @@ std::string Converter::WriteTexture(string saveFolder, string file)
 			CHECK(hr);
 		}
 	}
-	else 
+	else
 	{
 		string originStr = (filesystem::path(_assetPath) / folderName / file).string();
 		Utils::Replace(originStr, "\\", "/");
-	
+
 		string pathStr = (filesystem::path(saveFolder) / fileName).string();
 		Utils::Replace(pathStr, "\\", "/");
 
@@ -441,25 +424,25 @@ std::string Converter::WriteTexture(string saveFolder, string file)
 	return fileName;
 }
 
-shared_ptr<asAnimation> Converter::ReadAnimationData(aiAnimation* srcAnimation)
+std::shared_ptr<asAnimation> Converter::ReadAnimationData(aiAnimation* srcAnimation)
 {
 	shared_ptr<asAnimation> animation = make_shared<asAnimation>();
 	animation->name = srcAnimation->mName.C_Str();
-	animation->frameRate = static_cast<float>(srcAnimation->mTicksPerSecond);
-	animation->frameCount = static_cast<uint32>(srcAnimation->mDuration)+1;
-	
+	animation->frameRate = (float)srcAnimation->mTicksPerSecond;
+	animation->frameCount = (uint32)srcAnimation->mDuration + 1;
+
 	map<string, shared_ptr<asAnimationNode>> cacheAnimNodes;
 
-	for (uint32 i = 0; i < srcAnimation->mNumChannels; i++) 
-	{	
+	for (uint32 i = 0; i < srcAnimation->mNumChannels; i++)
+	{
 		aiNodeAnim* srcNode = srcAnimation->mChannels[i];
-	
+
 		// 애니메이션 노드 데이터 파싱
 		shared_ptr<asAnimationNode> node = ParseAnimationNode(animation, srcNode);
-	
-		// 현재 찾은 노드 중 가장 긴 시간으로 애니메이션 시간을 갱신
+
+		// 현재 찾은 노드 중에 제일 긴 시간으로 애니메이션 시간 갱신
 		animation->duration = max(animation->duration, node->keyframe.back().time);
-		
+
 		cacheAnimNodes[srcNode->mNodeName.C_Str()] = node;
 	}
 
@@ -468,12 +451,12 @@ shared_ptr<asAnimation> Converter::ReadAnimationData(aiAnimation* srcAnimation)
 	return animation;
 }
 
-shared_ptr<asAnimationNode> Converter::ParseAnimationNode(shared_ptr<asAnimation> animation, aiNodeAnim* srcNode)
+std::shared_ptr<asAnimationNode> Converter::ParseAnimationNode(shared_ptr<asAnimation> animation, aiNodeAnim* srcNode)
 {
-	shared_ptr<asAnimationNode> node = make_shared < asAnimationNode>();
+	std::shared_ptr<asAnimationNode> node = make_shared<asAnimationNode>();
 	node->name = srcNode->mNodeName;
-	
-	uint32 keyCount = max(max(srcNode->mNumPositionKeys, srcNode->mNumRotationKeys), srcNode->mNumScalingKeys);
+
+	uint32 keyCount = max(max(srcNode->mNumPositionKeys, srcNode->mNumScalingKeys), srcNode->mNumRotationKeys);
 
 	for (uint32 k = 0; k < keyCount; k++)
 	{
@@ -483,21 +466,21 @@ shared_ptr<asAnimationNode> Converter::ParseAnimationNode(shared_ptr<asAnimation
 		uint32 t = node->keyframe.size();
 
 		// Position
-		if (::fabsf(static_cast<float>(srcNode->mPositionKeys[k].mTime) - static_cast<float>(t) <= 0.0001f))
+		if (::fabsf((float)srcNode->mPositionKeys[k].mTime - (float)t) <= 0.0001f)
 		{
 			aiVectorKey key = srcNode->mPositionKeys[k];
-			frameData.time = static_cast<float>(key.mTime);
+			frameData.time = (float)key.mTime;
 			::memcpy_s(&frameData.translation, sizeof(Vec3), &key.mValue, sizeof(aiVector3D));
-			
+
 			found = true;
 		}
 
 		// Rotation
-		if (::fabsf(static_cast<float>(srcNode->mRotationKeys[k].mTime) - static_cast<float>(t) <= 0.0001f))
+		if (::fabsf((float)srcNode->mRotationKeys[k].mTime - (float)t) <= 0.0001f)
 		{
 			aiQuatKey key = srcNode->mRotationKeys[k];
-			frameData.time = static_cast<float>(key.mTime);
-			
+			frameData.time = (float)key.mTime;
+
 			frameData.rotation.x = key.mValue.x;
 			frameData.rotation.y = key.mValue.y;
 			frameData.rotation.z = key.mValue.z;
@@ -507,11 +490,11 @@ shared_ptr<asAnimationNode> Converter::ParseAnimationNode(shared_ptr<asAnimation
 		}
 
 		// Scale
-		if (::fabsf(static_cast<float>(srcNode->mScalingKeys[k].mTime) - static_cast<float>(t) <= 0.0001f))
+		if (::fabsf((float)srcNode->mScalingKeys[k].mTime - (float)t) <= 0.0001f)
 		{
 			aiVectorKey key = srcNode->mScalingKeys[k];
-			frameData.time = static_cast<float>(key.mTime);
-			::memcpy_s(&frameData.rotation, sizeof(Vec3), &key.mValue, sizeof(aiVector3D));
+			frameData.time = (float)key.mTime;
+			::memcpy_s(&frameData.scale, sizeof(Vec3), &key.mValue, sizeof(aiVector3D));
 
 			found = true;
 		}
@@ -520,20 +503,20 @@ shared_ptr<asAnimationNode> Converter::ParseAnimationNode(shared_ptr<asAnimation
 			node->keyframe.push_back(frameData);
 	}
 
-	// Keyframe 크기 보정
+	// Keyframe 늘려주기
 	if (node->keyframe.size() < animation->frameCount)
 	{
 		uint32 count = animation->frameCount - node->keyframe.size();
-		asKeyframeData keyframeBack = node->keyframe.back();
+		asKeyframeData keyFrame = node->keyframe.back();
 
 		for (uint32 n = 0; n < count; n++)
-			node->keyframe.push_back(keyframeBack);
+			node->keyframe.push_back(keyFrame);
 	}
 
 	return node;
 }
 
-void Converter::ReadKeyframeData(shared_ptr<asAnimation> animation, aiNode* srcNode, map<string, shared_ptr<asAnimationNode>> cache)
+void Converter::ReadKeyframeData(shared_ptr<asAnimation> animation, aiNode* srcNode, map<string, shared_ptr<asAnimationNode>>& cache)
 {
 	shared_ptr<asKeyframe> keyframe = make_shared<asKeyframe>();
 	keyframe->boneName = srcNode->mName.C_Str();
@@ -548,7 +531,7 @@ void Converter::ReadKeyframeData(shared_ptr<asAnimation> animation, aiNode* srcN
 		{
 			Matrix transform(srcNode->mTransformation[0]);
 			transform = transform.Transpose();
-			frameData.time = static_cast<float>(i);
+			frameData.time = (float)i;
 			transform.Decompose(OUT frameData.scale, OUT frameData.rotation, OUT frameData.translation);
 		}
 		else
@@ -559,6 +542,7 @@ void Converter::ReadKeyframeData(shared_ptr<asAnimation> animation, aiNode* srcN
 		keyframe->transforms.push_back(frameData);
 	}
 
+	// 애니메이션 키프레임 채우기
 	animation->keyframes.push_back(keyframe);
 
 	for (uint32 i = 0; i < srcNode->mNumChildren; i++)
@@ -569,6 +553,7 @@ void Converter::WriteAnimationData(shared_ptr<asAnimation> animation, wstring fi
 {
 	auto path = filesystem::path(finalPath);
 
+	// 폴더가 없으면 만든다.
 	filesystem::create_directory(path.parent_path());
 
 	shared_ptr<FileUtils> file = make_shared<FileUtils>();
@@ -584,6 +569,7 @@ void Converter::WriteAnimationData(shared_ptr<asAnimation> animation, wstring fi
 	for (shared_ptr<asKeyframe> keyframe : animation->keyframes)
 	{
 		file->Write<string>(keyframe->boneName);
+
 		file->Write<uint32>(keyframe->transforms.size());
 		file->Write(&keyframe->transforms[0], sizeof(asKeyframeData) * keyframe->transforms.size());
 	}
@@ -591,12 +577,12 @@ void Converter::WriteAnimationData(shared_ptr<asAnimation> animation, wstring fi
 
 uint32 Converter::GetBoneIndex(const string& name)
 {
-	for (shared_ptr<asBone> bone : _bones) {
-		if (bone->name == name) 
+	for (shared_ptr<asBone>& bone : _bones)
+	{
+		if (bone->name == name)
 			return bone->index;
 	}
 
 	assert(false);
-
 	return 0;
 }

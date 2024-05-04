@@ -154,6 +154,7 @@
     <ClInclude Include="Main.h" />
     <ClInclude Include="pch.h" />
     <ClInclude Include="StaticMeshDemo.h" />
+    <ClInclude Include="TweenDemo.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="AnimationDemo.cpp" />
@@ -167,6 +168,7 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="StaticMeshDemo.cpp" />
+    <ClCompile Include="TweenDemo.cpp" />
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="..\Shaders\00. Global.fx" />
@@ -197,6 +199,7 @@
     <FxCompile Include="..\Shaders\15. NormalMapping.fx" />
     <FxCompile Include="..\Shaders\16. ModelDemo.fx" />
     <FxCompile Include="..\Shaders\17. AnimationDemo.fx" />
+    <FxCompile Include="..\Shaders\18. TweenDemo.fx" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

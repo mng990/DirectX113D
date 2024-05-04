@@ -54,6 +54,9 @@
     <ClCompile Include="AnimationDemo.cpp">
       <Filter>Game</Filter>
     </ClCompile>
+    <ClCompile Include="TweenDemo.cpp">
+      <Filter>Game</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h">
@@ -81,6 +84,9 @@
       <Filter>Game</Filter>
     </ClInclude>
     <ClInclude Include="AnimationDemo.h">
+      <Filter>Game</Filter>
+    </ClInclude>
+    <ClInclude Include="TweenDemo.h">
       <Filter>Game</Filter>
     </ClInclude>
   </ItemGroup>
@@ -140,6 +146,9 @@
       <Filter>Shaders\Week3</Filter>
     </FxCompile>
     <FxCompile Include="..\Shaders\17. AnimationDemo.fx">
+      <Filter>Shaders\Week3</Filter>
+    </FxCompile>
+    <FxCompile Include="..\Shaders\18. TweenDemo.fx">
       <Filter>Shaders\Week3</Filter>
     </FxCompile>
   </ItemGroup>

@@ -48,6 +48,8 @@ void ModelRenderer::Update()
 
 	const uint32 boneCount = _model->GetBoneCount();
 
+	assert(boneCount <= MAX_MODEL_TRANSFORMS);
+
 	for (uint32 i = 0; i < boneCount; i++)
 	{
 		shared_ptr<ModelBone> bone = _model->GetBoneByIndex(i);
