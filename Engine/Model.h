@@ -12,6 +12,8 @@ public:
 
 public:
 
+	uint32 GetBoneCount() { return _bones.size(); }
+
 	vector<shared_ptr<ModelBone>>& GetBones() { return _bones; }
 	shared_ptr<ModelBone> GetBoneByName(wstring boneName);
 	shared_ptr<ModelBone> GetBoneByIndex(int32 boneIndex) { return _bones[boneIndex]; }

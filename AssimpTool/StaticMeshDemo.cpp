@@ -54,7 +54,7 @@ void StaticMeshDemo::CreateTower()
 
 	_obj = make_shared<GameObject>();
 	_obj->GetOrAddTransform()->SetPosition(Vec3(0, 0, 50));
-	_obj->GetOrAddTransform()->SetScale(Vec3(1.f));
+	_obj->GetOrAddTransform()->SetScale(Vec3(0.1f));
 
 	shared_ptr<ModelRenderer> modelRenderer = make_shared<ModelRenderer>(_shader);
 	modelRenderer->SetPass(1);
@@ -69,6 +69,60 @@ void StaticMeshDemo::CreateTank()
 	shared_ptr<Model> m1 = make_shared<Model>();
 	m1->ReadModel(L"Tank/Tank");
 	m1->ReadMaterial(L"Tank/Tank");
+
+	_obj = make_shared<GameObject>();
+	_obj->GetOrAddTransform()->SetPosition(Vec3(0, 0, 50));
+	_obj->GetOrAddTransform()->SetScale(Vec3(1.f));
+
+	shared_ptr<ModelRenderer> modelRenderer = make_shared<ModelRenderer>(_shader);
+	modelRenderer->SetPass(1);
+
+	_obj->AddComponent(modelRenderer);
+
+	_obj->GetModelRenderer()->SetModel(m1);
+}
+
+void StaticMeshDemo::CreateDragon()
+{
+	shared_ptr<Model> m1 = make_shared<Model>();
+	m1->ReadModel(L"Dragon/Dragon");
+	m1->ReadMaterial(L"Dragon/Dragon");
+
+	_obj = make_shared<GameObject>();
+	_obj->GetOrAddTransform()->SetPosition(Vec3(0, 0, 50));
+	_obj->GetOrAddTransform()->SetScale(Vec3(1.f));
+
+	shared_ptr<ModelRenderer> modelRenderer = make_shared<ModelRenderer>(_shader);
+	modelRenderer->SetPass(1);
+
+	_obj->AddComponent(modelRenderer);
+
+	_obj->GetModelRenderer()->SetModel(m1);
+}
+
+void StaticMeshDemo::CreateAlien()
+{
+	shared_ptr<Model> m1 = make_shared<Model>();
+	m1->ReadModel(L"Alien/Alien");
+	m1->ReadMaterial(L"Alien/Alien");
+
+	_obj = make_shared<GameObject>();
+	_obj->GetOrAddTransform()->SetPosition(Vec3(0, 0, 50));
+	_obj->GetOrAddTransform()->SetScale(Vec3(1.f));
+
+	shared_ptr<ModelRenderer> modelRenderer = make_shared<ModelRenderer>(_shader);
+	modelRenderer->SetPass(1);
+
+	_obj->AddComponent(modelRenderer);
+
+	_obj->GetModelRenderer()->SetModel(m1);
+}
+
+void StaticMeshDemo::CreateHulkbuster()
+{
+	shared_ptr<Model> m1 = make_shared<Model>();
+	m1->ReadModel(L"Hulkbuster/Hulkbuster");
+	m1->ReadMaterial(L"Hulkbuster/Hulkbuster");
 
 	_obj = make_shared<GameObject>();
 	_obj->GetOrAddTransform()->SetPosition(Vec3(0, 0, 50));

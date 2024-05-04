@@ -7,9 +7,6 @@
     <Filter Include="Main">
       <UniqueIdentifier>{5de2925e-bfab-4aff-b6bd-74bb062eb8e7}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Shaders">
-      <UniqueIdentifier>{04f04d59-2922-470a-9ffe-27ee343f3f8a}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Main\Camera">
       <UniqueIdentifier>{083c62ba-6c73-412b-98b5-3a147e7dcbb4}</UniqueIdentifier>
     </Filter>
@@ -19,27 +16,12 @@
     <Filter Include="Game\Week2">
       <UniqueIdentifier>{f2d7b49c-24b9-491f-8092-6ba67c26fca6}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Shaders\Week2">
-      <UniqueIdentifier>{ee541b52-81c0-4d5e-a35f-6e45a5cc3f20}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Shaders\Week1">
-      <UniqueIdentifier>{90e9a95c-44ec-4348-8a39-c6d52a4e3edd}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Shaders\Common">
-      <UniqueIdentifier>{8d1ab6dd-12ba-48c4-a75d-ee434abcea77}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Game\Week3">
       <UniqueIdentifier>{0d9b5ce4-07bd-4603-8f67-29c32799235b}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Shaders\Week3">
-      <UniqueIdentifier>{719ccff5-9e81-4906-980e-b838418f93b1}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp">
-      <Filter>Main</Filter>
-    </ClCompile>
-    <ClCompile Include="Main.cpp">
       <Filter>Main</Filter>
     </ClCompile>
     <ClCompile Include="CameraScript.cpp">
@@ -104,9 +86,6 @@
     <ClInclude Include="pch.h">
       <Filter>Main</Filter>
     </ClInclude>
-    <ClInclude Include="Main.h">
-      <Filter>Main</Filter>
-    </ClInclude>
     <ClInclude Include="CameraScript.h">
       <Filter>Main\Camera</Filter>
     </ClInclude>
@@ -164,61 +143,5 @@
     <ClInclude Include="18. NormalMappingDemo.h">
       <Filter>Game\Week2</Filter>
     </ClInclude>
-  </ItemGroup>
-  <ItemGroup>
-    <FxCompile Include="..\Shaders\01. Triangle.fx">
-      <Filter>Shaders\Week1</Filter>
-    </FxCompile>
-    <FxCompile Include="..\Shaders\02. Quad.fx">
-      <Filter>Shaders\Week1</Filter>
-    </FxCompile>
-    <FxCompile Include="..\Shaders\03. ConstantBuffer.fx">
-      <Filter>Shaders\Week1</Filter>
-    </FxCompile>
-    <FxCompile Include="..\Shaders\04. Texture.fx">
-      <Filter>Shaders\Week1</Filter>
-    </FxCompile>
-    <FxCompile Include="..\Shaders\05. Sampler.fx">
-      <Filter>Shaders\Week1</Filter>
-    </FxCompile>
-    <FxCompile Include="..\Shaders\06. Terrain.fx">
-      <Filter>Shaders\Week1</Filter>
-    </FxCompile>
-    <FxCompile Include="..\Shaders\07. Normal.fx">
-      <Filter>Shaders\Week1</Filter>
-    </FxCompile>
-    <FxCompile Include="..\Shaders\08. GlobalTest.fx">
-      <Filter>Shaders\Week2</Filter>
-    </FxCompile>
-    <FxCompile Include="..\Shaders\00. Global.fx">
-      <Filter>Shaders\Common</Filter>
-    </FxCompile>
-    <FxCompile Include="..\Shaders\09. Lighting_Ambient.fx">
-      <Filter>Shaders\Week2</Filter>
-    </FxCompile>
-    <FxCompile Include="..\Shaders\10. Lighting_Diffuse.fx">
-      <Filter>Shaders\Week2</Filter>
-    </FxCompile>
-    <FxCompile Include="..\Shaders\11. Lighting_Specular.fx">
-      <Filter>Shaders\Week2</Filter>
-    </FxCompile>
-    <FxCompile Include="..\Shaders\12. Lighting_Emissive.fx">
-      <Filter>Shaders\Week2</Filter>
-    </FxCompile>
-    <FxCompile Include="..\Shaders\13. Lighting.fx">
-      <Filter>Shaders\Week2</Filter>
-    </FxCompile>
-    <FxCompile Include="..\Shaders\00. Light.fx">
-      <Filter>Shaders\Common</Filter>
-    </FxCompile>
-    <FxCompile Include="..\Shaders\14. Material.fx">
-      <Filter>Shaders\Week2</Filter>
-    </FxCompile>
-    <FxCompile Include="..\Shaders\15. NormalMapping.fx">
-      <Filter>Shaders\Week2</Filter>
-    </FxCompile>
-    <FxCompile Include="..\Shaders\16. ModelDemo.fx">
-      <Filter>Shaders\Week3</Filter>
-    </FxCompile>
   </ItemGroup>
 </Project>

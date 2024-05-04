@@ -10,6 +10,11 @@ public:
 
 	void CreateTower();
 	void CreateTank();
+	void CreateDragon();
+
+	void CreateAlien();
+
+	void CreateHulkbuster();
 
 private:
 	shared_ptr<Shader> _shader;

@@ -7,41 +7,27 @@ void AssimpTool::Init()
 	{
 		shared_ptr<Converter> converter = make_shared<Converter>();
 		
-		// FBX -> Memory
-		converter->ReadAssetFile(L"House/House.fbx");
-
-		// Memory -> CustomData
-		converter->ExportMaterialData(L"House/House");
-		converter->ExportModelData(L"House/House");
-
-		// CustomData -> Memory
-
+		converter->ReadAssetFile(L"Kachujin/Mesh.fbx");
+		converter->ExportMaterialData(L"Kachujin/Kachujin");
+		converter->ExportModelData(L"Kachujin/Kachujin");
 	}
-
 	{
 		shared_ptr<Converter> converter = make_shared<Converter>();
 
-		// FBX -> Memory
-		converter->ReadAssetFile(L"Tower/Tower.fbx");
-
-		// Memory -> CustomData
-		converter->ExportMaterialData(L"Tower/Tower");
-		converter->ExportModelData(L"Tower/Tower");
-
-		// CustomData -> Memory
+		converter->ReadAssetFile(L"Kachujin/Idle.fbx");
+		converter->ExportAnimationData(L"Kachujin/Idle");
 	}
-
 	{
 		shared_ptr<Converter> converter = make_shared<Converter>();
 
-		// FBX -> Memory
-		converter->ReadAssetFile(L"Tank/Tank.fbx");
+		converter->ReadAssetFile(L"Kachujin/Run.fbx");
+		converter->ExportAnimationData(L"Kachujin/Run");
+	}
+	{
+		shared_ptr<Converter> converter = make_shared<Converter>();
 
-		// Memory -> CustomData
-		converter->ExportMaterialData(L"Tank/Tank");
-		converter->ExportModelData(L"Tank/Tank");
-
-		// CustomData -> Memory
+		converter->ReadAssetFile(L"Kachujin/Slash.fbx");
+		converter->ExportAnimationData(L"Kachujin/Slash");
 	}
 }
 
