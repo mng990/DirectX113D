@@ -37,6 +37,7 @@
     <ClInclude Include="18. NormalMappingDemo.h" />
     <ClInclude Include="CameraScript.h" />
     <ClInclude Include="15. EmissiveDemo.h" />
+    <ClInclude Include="Main.h" />
     <ClInclude Include="pch.h" />
     <ClInclude Include="01. TriangleDemo.h" />
   </ItemGroup>
@@ -59,6 +60,7 @@
     <ClCompile Include="18. NormalMappingDemo.cpp" />
     <ClCompile Include="CameraScript.cpp" />
     <ClCompile Include="15. EmissiveDemo.cpp" />
+    <ClCompile Include="Main.cpp" />
     <ClCompile Include="pch.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
     </ClCompile>

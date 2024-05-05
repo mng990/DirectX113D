@@ -57,6 +57,9 @@
     <ClCompile Include="TweenDemo.cpp">
       <Filter>Game</Filter>
     </ClCompile>
+    <ClCompile Include="SkyDemo.cpp">
+      <Filter>Game</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h">
@@ -87,6 +90,9 @@
       <Filter>Game</Filter>
     </ClInclude>
     <ClInclude Include="TweenDemo.h">
+      <Filter>Game</Filter>
+    </ClInclude>
+    <ClInclude Include="SkyDemo.h">
       <Filter>Game</Filter>
     </ClInclude>
   </ItemGroup>
@@ -149,6 +155,9 @@
       <Filter>Shaders\Week3</Filter>
     </FxCompile>
     <FxCompile Include="..\Shaders\18. TweenDemo.fx">
+      <Filter>Shaders\Week3</Filter>
+    </FxCompile>
+    <FxCompile Include="..\Shaders\19. SkyDemo.fx">
       <Filter>Shaders\Week3</Filter>
     </FxCompile>
   </ItemGroup>

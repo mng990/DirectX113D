@@ -29,11 +29,6 @@ cbuffer TweenBuffer
     TweenFrameDesc TweenFrames;
 };
 
-cbuffer KeyframeBuffer
-{
-    KeyframeDesc Keyframes;
-};
-
 cbuffer BoneBuffer
 {
     matrix BoneTransforms[MAX_MODEL_TRANSFORMS];
@@ -74,13 +69,12 @@ matrix GetAnimationMatrix(VertexTextureTangentNormalBlend input)
         c1 = TransformMap.Load(int4(indices[i] * 4 + 1, currFrame[0], animIndex[0], 0));
         c2 = TransformMap.Load(int4(indices[i] * 4 + 2, currFrame[0], animIndex[0], 0));
         c3 = TransformMap.Load(int4(indices[i] * 4 + 3, currFrame[0], animIndex[0], 0));
-        
         curr = matrix(c0, c1, c2, c3);
         
-        n0 = TransformMap.Load(int4(indices[i] * 4 + 0, nextFrame[0], animIndex[1], 0));
-        n1 = TransformMap.Load(int4(indices[i] * 4 + 1, nextFrame[0], animIndex[1], 0));
-        n2 = TransformMap.Load(int4(indices[i] * 4 + 2, nextFrame[0], animIndex[1], 0));
-        n3 = TransformMap.Load(int4(indices[i] * 4 + 3, nextFrame[0], animIndex[1], 0));
+        n0 = TransformMap.Load(int4(indices[i] * 4 + 0, nextFrame[0], animIndex[0], 0));
+        n1 = TransformMap.Load(int4(indices[i] * 4 + 1, nextFrame[0], animIndex[0], 0));
+        n2 = TransformMap.Load(int4(indices[i] * 4 + 2, nextFrame[0], animIndex[0], 0));
+        n3 = TransformMap.Load(int4(indices[i] * 4 + 3, nextFrame[0], animIndex[0], 0));
         next = matrix(n0, n1, n2, n3);
         
         matrix result = lerp(curr, next, ratio[0]);
@@ -101,9 +95,6 @@ matrix GetAnimationMatrix(VertexTextureTangentNormalBlend input)
             next = matrix(n0, n1, n2, n3);
         
             matrix nextResult = lerp(curr, next, ratio[1]);
-            
-            // lerp: 선형 보간
-            // tweenRatio: transition 보간 비율
             result = lerp(result, nextResult, TweenFrames.tweenRatio);
         }
         

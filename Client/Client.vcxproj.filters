@@ -81,6 +81,9 @@
     <ClCompile Include="18. NormalMappingDemo.cpp">
       <Filter>Game\Week2</Filter>
     </ClCompile>
+    <ClCompile Include="Main.cpp">
+      <Filter>Main</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h">
@@ -142,6 +145,9 @@
     </ClInclude>
     <ClInclude Include="18. NormalMappingDemo.h">
       <Filter>Game\Week2</Filter>
+    </ClInclude>
+    <ClInclude Include="Main.h">
+      <Filter>Main</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

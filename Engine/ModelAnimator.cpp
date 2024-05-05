@@ -7,7 +7,7 @@
 #include "ModelAnimation.h"
 
 ModelAnimator::ModelAnimator(shared_ptr<Shader> shader)
-	:Super(ComponentType::Animator), _shader(shader)
+	: Super(ComponentType::Animator), _shader(shader)
 {
 }
 
@@ -25,30 +25,79 @@ void ModelAnimator::Update()
 	if (_texture == nullptr)
 		CreateTexture();
 
-	_keyframeDesc.sumTime += DT;
-	shared_ptr<ModelAnimation> current = _model->GetAnimationByIndex(_keyframeDesc.animIndex);
-	if (current)
-	{
-		float timePerFrame = 1 / (current->frameRate * _keyframeDesc.speed);
-		if (_keyframeDesc.sumTime >= timePerFrame)
-		{
-			_keyframeDesc.sumTime = 0.f;
-			_keyframeDesc.currFrame = (_keyframeDesc.currFrame + 1) % current->frameCount;
-			_keyframeDesc.nextFrame = (_keyframeDesc.currFrame + 1) % current->frameCount;
-		}
+	TweenDesc& desc = _tweenDesc;
+	desc.curr.sumTime += DT;
 
-		_keyframeDesc.ratio = (_keyframeDesc.sumTime / timePerFrame);
+	// 현재 애니메이션
+	{
+		shared_ptr<ModelAnimation> currentAnim = _model->GetAnimationByIndex(desc.curr.animIndex);
+
+		if (currentAnim)
+		{
+			float timePerFrame = 1 / (currentAnim->frameRate * desc.curr.speed);
+			if (desc.curr.sumTime >= timePerFrame)
+			{
+				desc.curr.sumTime = 0;
+				desc.curr.currFrame = (desc.curr.currFrame + 1) % currentAnim->frameCount;
+				desc.curr.nextFrame = (desc.curr.currFrame + 1) % currentAnim->frameCount;
+			}
+
+			desc.curr.ratio = (desc.curr.sumTime / timePerFrame);
+		}
+	}
+
+	// 다음 애니메이션이 예약되어 있다면
+	if (desc.next.animIndex >= 0)
+	{
+		desc.tweenSumTime += DT;
+		desc.tweenRatio = desc.tweenSumTime / desc.tweenDuration;
+
+		if (desc.tweenRatio >= 1.f)
+		{
+			// 애니메이션 교체 성공
+			desc.curr = desc.next;
+			desc.ClearNextAnim();
+		}
+		else
+		{
+			// 교체중
+
+			shared_ptr<ModelAnimation> nextAnim = _model->GetAnimationByIndex(desc.next.animIndex);
+			desc.next.sumTime += DT;
+
+			float timePerFrame = 1.f / (nextAnim->frameRate * desc.next.speed);
+
+			if (desc.next.ratio >= 1.f)
+			{
+				desc.next.sumTime = 0;
+				desc.next.currFrame = (desc.next.currFrame + 1) % nextAnim->frameCount;
+				desc.next.nextFrame = (desc.next.currFrame + 1) % nextAnim->frameCount;
+			}
+
+			desc.next.ratio = desc.next.sumTime / timePerFrame;
+		}
 	}
 
 	// Anim Update
-	ImGui::InputInt("AnimIndex", &_keyframeDesc.animIndex);
-	_keyframeDesc.animIndex %= _model->GetAnimationCount();
-	ImGui::InputFloat("Speed", &_keyframeDesc.speed, 0.5f, 4.f);
-// 	ImGui::InputInt("CurrFrame", reinterpret_cast<int*>(& _keyframeDesc.currFrame));
-// 	_keyframeDesc.currFrame %= _model->GetAnimationByIndex(_keyframeDesc.animIndex)->frameCount;
+	ImGui::InputInt("AnimIndex", &desc.curr.animIndex);
+	desc.curr.animIndex %= _model->GetAnimationCount();
+
+
+	static int32 nextAnimIndex = 0;
+	if (ImGui::InputInt("NextAnimIndex", &nextAnimIndex))
+	{
+		nextAnimIndex %= _model->GetAnimationCount();
+		desc.ClearNextAnim();
+		desc.next.animIndex = nextAnimIndex;
+	}
+
+	if (_model->GetAnimationCount() > 0)
+		desc.curr.animIndex %= _model->GetAnimationCount();
+
+	ImGui::InputFloat("Speed", &desc.curr.speed, 0.5f, 4.f);
 
 	// 애니메이션 현재 프레임 정보
-	RENDER->PushKeyframeData(_keyframeDesc);
+	RENDER->PushTweenData(desc);
 
 	// SRV를 통해 전달
 	_shader->GetSRV("TransformMap")->SetResource(_srv.Get());

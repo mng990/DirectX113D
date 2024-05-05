@@ -11,7 +11,7 @@ void TweenDemo::Init()
 {
 	//RESOURCES->Init();
 
-	_shader = make_shared<Shader>(L"17. AnimationDemo.fx");
+	_shader = make_shared<Shader>(L"18. TweenDemo.fx");
 
 	// Camera
 	_camera = make_shared<GameObject>();
@@ -19,6 +19,7 @@ void TweenDemo::Init()
 	_camera->AddComponent(make_shared<Camera>());
 	_camera->AddComponent(make_shared<CameraScript>());
 	CreateKachujin();
+
 	RENDER->Init(_shader);
 }
 

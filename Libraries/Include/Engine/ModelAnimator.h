@@ -30,6 +30,7 @@ private:
 
 private:
 	KeyframeDesc _keyframeDesc;
+	TweenDesc _tweenDesc;
 
 private:
 	vector<AnimTransform> _animTransforms;
