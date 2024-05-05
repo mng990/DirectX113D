@@ -19,6 +19,7 @@ public:
 	// Legacy
 	void SetTexture(shared_ptr<Texture> texture) { _texture = texture; }
 	void SetShader(shared_ptr<Shader> shader) { _shader = shader; }
+	void SetPass(uint8 pass) { _pass = pass; }
 
 private:
 	// Mesh
@@ -26,5 +27,6 @@ private:
 	shared_ptr<Texture> _texture;
 	shared_ptr<Shader> _shader;
 	shared_ptr<Material> _material;
+	uint8 _pass = 0;
 };
 

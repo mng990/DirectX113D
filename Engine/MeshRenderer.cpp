@@ -55,5 +55,5 @@ void MeshRenderer::Update()
 	DC->IASetVertexBuffers(0, 1, _mesh->GetVertexBuffer()->GetComPtr().GetAddressOf(), &stride, &offset);
 	DC->IASetIndexBuffer(_mesh->GetIndexBuffer()->GetComPtr().Get(), DXGI_FORMAT_R32_UINT, 0);
 
-	shader->DrawIndexed(0, 0, _mesh->GetIndexBuffer()->GetCount(), 0, 0);
+	shader->DrawIndexed(0, _pass, _mesh->GetIndexBuffer()->GetCount(), 0, 0);
 }
