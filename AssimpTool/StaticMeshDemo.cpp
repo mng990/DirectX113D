@@ -18,7 +18,7 @@ void StaticMeshDemo::Init()
 	_camera->AddComponent(make_shared<Camera>());
 	_camera->AddComponent(make_shared<CameraScript>());
 
-	CreateTank();
+	CreateAlien();
 
 	RENDER->Init(_shader);
 }

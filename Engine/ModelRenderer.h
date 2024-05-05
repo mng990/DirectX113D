@@ -12,9 +12,11 @@ public:
 	ModelRenderer(shared_ptr<Shader> shader);
 	~ModelRenderer();
 
-	virtual void Update() override;
 	void SetModel(shared_ptr<Model> model);
 	void SetPass(uint8 pass) { _pass = pass; }
+
+	void RenderInstancing(shared_ptr<InstancingBuffer>& buffer);
+	InstanceID GetInstanceID();
 
 private:
 	shared_ptr<Shader> _shader;

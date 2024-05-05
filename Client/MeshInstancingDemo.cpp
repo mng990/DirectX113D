@@ -3,6 +3,7 @@
 #include "Camera.h"
 #include "CameraScript.h"
 #include "MeshRenderer.h"
+#include "InstancingManager.h"
 
 void MeshInstancingDemo::Init()
 {
@@ -19,13 +20,13 @@ void MeshInstancingDemo::Init()
 	{
 		shared_ptr<Material> material = make_shared<Material>();
 		material->SetShader(_shader);
-		auto texture = RESOURCES->Load<Texture>(L"IceCream", L"..\\Resources\\Textures\\IceCream.png");
+		auto texture = RESOURCES->Load<Texture>(L"Kirby", L"..\\Resources\\Textures\\kirby.jpg");
 		material->SetDiffuseMap(texture);
 		MaterialDesc& desc = material->GetMaterialDesc();
 		desc.ambient = Vec4(1.f);
 		desc.diffuse = Vec4(1.f);
 		desc.specular = Vec4(1.f);
-		RESOURCES->Add(L"IceCream", material);
+		RESOURCES->Add(L"Kirby", material);
 		// INSTANCING
 		_material = material;
 	}
@@ -36,7 +37,7 @@ void MeshInstancingDemo::Init()
 		obj->GetOrAddTransform()->SetPosition(Vec3(rand() % 100, 0, rand() % 100));
 		obj->AddComponent(make_shared<MeshRenderer>());
 		{
-			obj->GetMeshRenderer()->SetMaterial(RESOURCES->Get<Material>(L"IceCream"));
+			obj->GetMeshRenderer()->SetMaterial(RESOURCES->Get<Material>(L"Kirby"));
 		}
 		{
 			auto mesh = RESOURCES->Get<Mesh>(L"Sphere");
@@ -71,23 +72,13 @@ void MeshInstancingDemo::Update()
 	{
 		LightDesc lightDesc;
 		lightDesc.ambient = Vec4(0.6f);
-		lightDesc.diffuse = Vec4(1.f);
-		lightDesc.specular = Vec4(0.7f);
+		lightDesc.diffuse = Vec4(0.8f);
+		lightDesc.specular = Vec4(0.3f);
 		lightDesc.direction = Vec3(1.f, -1.f, 1.f);
 		RENDER->PushLightData(lightDesc);
 	}
 
-// 	for (auto& obj : _objs)
-// 	{
-// 		obj->Update();
-// 	}
-	
-	_material->Update();
-	_mesh->GetVertexBuffer()->PushData();
-	_instanceBuffer->PushData();
-	_mesh->GetIndexBuffer()->PushData();
-
-	_shader->DrawIndexedInstanced(0,0, _mesh->GetIndexBuffer()->GetCount(), _objs.size());
+	INSTANCING->Render(_objs);
 }
 
 void MeshInstancingDemo::Render()

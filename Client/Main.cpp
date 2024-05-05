@@ -1,7 +1,7 @@
 #include "pch.h"
 #include "Main.h"
 #include "Engine/Game.h"
-#include "MeshInstancingDemo.h"
+#include "AnimInstancingDemo.h"
 
 int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int hShowCmd)
 {
@@ -14,7 +14,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 	desc.width = 800;
 	desc.height = 600;
 	desc.clearColor = Color(0.5f, 0.5f, 0.5f, 0.5f);
-	desc.app = make_shared<MeshInstancingDemo>();
+	desc.app = make_shared<AnimInstancingDemo>();
 
 	GAME->Run(desc);
 

@@ -20,3 +20,6 @@ using Vec4 = DirectX::SimpleMath::Vector4;
 using Matrix = DirectX::SimpleMath::Matrix;
 using Quaternion = DirectX::SimpleMath::Quaternion;
 
+
+// MeshID / MaterialID
+using InstanceID = std::pair<uint64, uint64>;

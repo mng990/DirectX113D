@@ -38,10 +38,21 @@ ModelRenderer::~ModelRenderer()
 // 	}
 // }
 
-void ModelRenderer::Update()
+void ModelRenderer::SetModel(shared_ptr<Model> model)
 {
-	if (_model == nullptr)
-		return;
+	_model = model;
+
+	const auto& materials = _model->GetMaterials();
+
+	for (auto& material : materials)
+	{
+		material->SetShader(_shader);
+	}
+}
+
+void ModelRenderer::RenderInstancing(shared_ptr<InstancingBuffer>& buffer)
+{
+	if (_model == nullptr) return;
 
 	// Bones
 	BoneDesc boneDesc;
@@ -56,11 +67,7 @@ void ModelRenderer::Update()
 		boneDesc.transforms[i] = bone->transform;
 	}
 
-
 	RENDER->PushBoneData(boneDesc);
-
-	auto world = GetTransform()->GetWorldMatrix();
-	RENDER->PushTransformData(TransformDesc{ world });
 
 	const auto& meshes = _model->GetMeshes();
 
@@ -68,29 +75,19 @@ void ModelRenderer::Update()
 		if (mesh->material)
 			mesh->material->Update();
 
-		//BoneIndex
+		// 계층 구조에 맞는 메쉬를 할당
 		_shader->GetScalar("BoneIndex")->SetInt(mesh->boneIndex);
 
-		uint32 stride = mesh->vertexBuffer->GetStride();
-		uint32 offset = mesh->vertexBuffer->GetOffset();
-
-		DC->IASetVertexBuffers(0, 1, mesh->vertexBuffer->GetComPtr().GetAddressOf(), &stride, &offset);
-		DC->IASetIndexBuffer(mesh->indexBuffer->GetComPtr().Get(), DXGI_FORMAT_R32_UINT, 0);
-
-		_shader->DrawIndexed(0, _pass, mesh->indexBuffer->GetCount(), 0, 0);
+		mesh->vertexBuffer->PushData();
+		mesh->indexBuffer->PushData();
 		
-		// _shader->DrawIndexedInstanced();
+		buffer->PushData();
+
+		_shader->DrawIndexedInstanced(0, _pass, mesh->indexBuffer->GetCount(), buffer->GetCount());
 	}
 }
 
-void ModelRenderer::SetModel(shared_ptr<Model> model)
+InstanceID ModelRenderer::GetInstanceID()
 {
-	_model = model;
-
-	const auto& materials = _model->GetMaterials();
-
-	for (auto& material : materials)
-	{
-		material->SetShader(_shader);
-	}
+	return make_pair((uint64)_model.get(), (uint64)_shader.get());
 }

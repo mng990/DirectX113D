@@ -3,6 +3,7 @@
 #include "Shader.h"
 #include "Mesh.h"
 #include "Material.h"
+#include "InstancingBuffer.h"
 
 class MeshRenderer : public Component
 {
@@ -11,21 +12,15 @@ public:
 	MeshRenderer();
 	virtual ~MeshRenderer();
 
-	virtual void Update() override;
-
+	void SetPass(uint8 pass) { _pass = pass; }
 	void SetMesh(shared_ptr<Mesh> mesh) { _mesh = mesh; }
 	void SetMaterial(shared_ptr<Material> material) { _material = material; }
+	InstanceID GetInstanceID() { return make_pair((uint64)_mesh.get(), (uint64)_material.get()); };
 
-	// Legacy
-	void SetTexture(shared_ptr<Texture> texture) { _texture = texture; }
-	void SetShader(shared_ptr<Shader> shader) { _shader = shader; }
-	void SetPass(uint8 pass) { _pass = pass; }
-
+	void RenderInstancing(shared_ptr<InstancingBuffer>& buffer);
 private:
 	// Mesh
 	shared_ptr<Mesh> _mesh;
-	shared_ptr<Texture> _texture;
-	shared_ptr<Shader> _shader;
 	shared_ptr<Material> _material;
 	uint8 _pass = 0;
 };

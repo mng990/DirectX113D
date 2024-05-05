@@ -19,17 +19,21 @@ public:
 	ModelAnimator(shared_ptr<Shader> shader);
 	~ModelAnimator();
 
-	virtual void Update() override;
+	//virtual void Update() override;
 	void SetModel(shared_ptr<Model> model);
 	void SetPass(uint8 pass) { _pass = pass; }
+
 	
+	void UpdateTweenData();
+	void RenderInstancing(shared_ptr<InstancingBuffer>& buffer);
+	InstanceID GetInstanceID();
+	TweenDesc& GetTweenDesc() { return _tweenDesc; }
+
 private:
 	void CreateTexture();
 	void CreateAnimationTransform(uint32 index);
 
-
 private:
-	KeyframeDesc _keyframeDesc;
 	TweenDesc _tweenDesc;
 
 private:
