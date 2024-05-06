@@ -1,41 +1,10 @@
 #include "00. Light.fx"
-#define MAX_MODEL_TRANSFORMS 500
-#define MAX_MODEL_KEYFRAMES 500
+#include "00. Render.fx"
 
-
-struct KeyframeDesc
+cbuffer TweenBufferDemo
 {
-    int animIndex;
-    uint currFrame;
-    uint nextFrame;
-    float ratio;
-    float sumTime;
-    float speed;
-    float2 padding;
+    TweenFrameDesc TweenFrameDemo;
 };
-
-struct TweenFrameDesc
-{
-    float tweenDuration;
-    float tweenRatio;
-    float tweenSumTime;
-    float padiding;
-    KeyframeDesc curr;
-    KeyframeDesc next;
-};
-
-cbuffer TweenBuffer
-{
-    TweenFrameDesc TweenFrames;
-};
-
-cbuffer BoneBuffer
-{
-    matrix BoneTransforms[MAX_MODEL_TRANSFORMS];
-};
-
-uint BoneIndex;
-Texture2DArray TransformMap;
 
 matrix GetAnimationMatrix(VertexTextureTangentNormalBlend input)
 {
@@ -47,15 +16,15 @@ matrix GetAnimationMatrix(VertexTextureTangentNormalBlend input)
     int nextFrame[2];
     float ratio[2];
     
-    animIndex[0] = TweenFrames.curr.animIndex;
-    currFrame[0] = TweenFrames.curr.currFrame;
-    nextFrame[0] = TweenFrames.curr.nextFrame;
-    ratio[0] = TweenFrames.curr.ratio;
+    animIndex[0] = TweenFrameDemo.curr.animIndex;
+    currFrame[0] = TweenFrameDemo.curr.currFrame;
+    nextFrame[0] = TweenFrameDemo.curr.nextFrame;
+    ratio[0] = TweenFrameDemo.curr.ratio;
     
-    animIndex[1] = TweenFrames.next.animIndex;
-    currFrame[1] = TweenFrames.next.currFrame;
-    nextFrame[1] = TweenFrames.next.nextFrame;
-    ratio[1] = TweenFrames.next.ratio;
+    animIndex[1] = TweenFrameDemo.next.animIndex;
+    currFrame[1] = TweenFrameDemo.next.currFrame;
+    nextFrame[1] = TweenFrameDemo.next.nextFrame;
+    ratio[1] = TweenFrameDemo.next.ratio;
     
     float4 c0, c1, c2, c3;
     float4 n0, n1, n2, n3;
@@ -95,7 +64,7 @@ matrix GetAnimationMatrix(VertexTextureTangentNormalBlend input)
             next = matrix(n0, n1, n2, n3);
         
             matrix nextResult = lerp(curr, next, ratio[1]);
-            result = lerp(result, nextResult, TweenFrames.tweenRatio);
+            result = lerp(result, nextResult, TweenFrameDemo.tweenRatio);
         }
         
         transform += mul(weight[i], result);

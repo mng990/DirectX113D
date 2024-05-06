@@ -1,4 +1,4 @@
-#include "00. Global.fx"
+#include "00. Render.fx"
 
 
 float4 MaterialEmissive;

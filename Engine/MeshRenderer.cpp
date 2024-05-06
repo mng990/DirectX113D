@@ -3,9 +3,10 @@
 #include "MeshRenderer.h"
 
 
+
 MeshRenderer::MeshRenderer()
 	: Super(ComponentType::MeshRenderer)
-{	
+{
 }
 
 MeshRenderer::~MeshRenderer()

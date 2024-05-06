@@ -1,5 +1,10 @@
 #pragma once
 #include "Component.h"
+#include "Light.h"
+#include "Camera.h"
+#include "Transform.h"
+#include "GameObject.h"
+
 
 class Camera;
 class Transform;
@@ -26,7 +31,7 @@ public:
 	shared_ptr<MeshRenderer> GetMeshRenderer();
 	shared_ptr<ModelRenderer> GetModelRenderer();
 	shared_ptr<ModelAnimator> GetModelAnimator();
-	//shared_ptr<Animator> GetAnimator();
+	shared_ptr<Light> GetLight();
 
 	shared_ptr<Transform> GetOrAddTransform();
 

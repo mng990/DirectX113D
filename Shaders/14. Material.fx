@@ -1,4 +1,5 @@
 #include "00. Light.fx"
+#include "00. Render.fx"
 
 
 MeshOutput VS(VertexTextureNormal input)

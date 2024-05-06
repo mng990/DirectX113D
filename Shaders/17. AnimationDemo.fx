@@ -1,31 +1,11 @@
 #include "00. Light.fx"
-#define MAX_MODEL_TRANSFORMS 500
-#define MAX_MODEL_KEYFRAMES 500
+#include "00. Render.fx"
 
-
-struct KeyframeDesc
-{
-    int animIndex;
-    uint currFrame;
-    uint nextFrame;
-    float ratio;
-    float sumTime;
-    float speed;
-    float2 padding;
-};
 
 cbuffer KeyframeBuffer
 {
     KeyframeDesc Keyframes;
 };
-
-cbuffer BoneBuffer
-{
-    matrix BoneTransforms[MAX_MODEL_TRANSFORMS];
-};
-
-uint BoneIndex;
-Texture2DArray TransformMap;
 
 /*
 matrix GetAnimationMatrix(VertexTextureTangentNormalBlend input)
