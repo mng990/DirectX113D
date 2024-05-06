@@ -10,15 +10,6 @@
     <Filter Include="Main\Camera">
       <UniqueIdentifier>{083c62ba-6c73-412b-98b5-3a147e7dcbb4}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Game\Week1">
-      <UniqueIdentifier>{d173a777-fe3c-4219-b9eb-4640e8d17118}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Game\Week2">
-      <UniqueIdentifier>{f2d7b49c-24b9-491f-8092-6ba67c26fca6}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Game\Week3">
-      <UniqueIdentifier>{0d9b5ce4-07bd-4603-8f67-29c32799235b}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Shaders">
       <UniqueIdentifier>{b44f21a7-85c4-4857-a0c0-c10dff6fa1af}</UniqueIdentifier>
     </Filter>
@@ -34,6 +25,9 @@
     <Filter Include="Shaders\Week3">
       <UniqueIdentifier>{353bce7a-0326-409d-b267-21446e9d724f}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Shaders\Week4">
+      <UniqueIdentifier>{f7ed6ef2-17ee-49c7-88a9-489c4e82b0d9}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp">
@@ -45,23 +39,11 @@
     <ClCompile Include="Main.cpp">
       <Filter>Main</Filter>
     </ClCompile>
-    <ClCompile Include="InstancingDemo.cpp">
-      <Filter>Game\Week3</Filter>
+    <ClCompile Include="RawBufferDemo.cpp">
+      <Filter>Game</Filter>
     </ClCompile>
-    <ClCompile Include="MeshInstancingDemo.cpp">
-      <Filter>Game\Week3</Filter>
-    </ClCompile>
-    <ClCompile Include="ModelInstancingDemo.cpp">
-      <Filter>Game\Week3</Filter>
-    </ClCompile>
-    <ClCompile Include="AnimInstancingDemo.cpp">
-      <Filter>Game\Week3</Filter>
-    </ClCompile>
-    <ClCompile Include="RenderDemo.cpp">
-      <Filter>Game\Week3</Filter>
-    </ClCompile>
-    <ClCompile Include="SceneDemo.cpp">
-      <Filter>Game\Week3</Filter>
+    <ClCompile Include="GroupDemo.cpp">
+      <Filter>Game</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -74,23 +56,11 @@
     <ClInclude Include="Main.h">
       <Filter>Main</Filter>
     </ClInclude>
-    <ClInclude Include="InstancingDemo.h">
-      <Filter>Game\Week3</Filter>
+    <ClInclude Include="RawBufferDemo.h">
+      <Filter>Game</Filter>
     </ClInclude>
-    <ClInclude Include="MeshInstancingDemo.h">
-      <Filter>Game\Week3</Filter>
-    </ClInclude>
-    <ClInclude Include="ModelInstancingDemo.h">
-      <Filter>Game\Week3</Filter>
-    </ClInclude>
-    <ClInclude Include="AnimInstancingDemo.h">
-      <Filter>Game\Week3</Filter>
-    </ClInclude>
-    <ClInclude Include="RenderDemo.h">
-      <Filter>Game\Week3</Filter>
-    </ClInclude>
-    <ClInclude Include="SceneDemo.h">
-      <Filter>Game\Week3</Filter>
+    <ClInclude Include="GroupDemo.h">
+      <Filter>Game</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -174,6 +144,12 @@
     </FxCompile>
     <FxCompile Include="..\Shaders\00. Render.fx">
       <Filter>Shaders\Common</Filter>
+    </FxCompile>
+    <FxCompile Include="..\Shaders\25. RawBufferDemo.fx">
+      <Filter>Shaders\Week4</Filter>
+    </FxCompile>
+    <FxCompile Include="..\Shaders\26. GroupDemo.fx">
+      <Filter>Shaders\Week4</Filter>
     </FxCompile>
   </ItemGroup>
 </Project>

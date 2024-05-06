@@ -19,28 +19,20 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="AnimInstancingDemo.h" />
     <ClInclude Include="CameraScript.h" />
-    <ClInclude Include="InstancingDemo.h" />
+    <ClInclude Include="GroupDemo.h" />
     <ClInclude Include="Main.h" />
-    <ClInclude Include="MeshInstancingDemo.h" />
-    <ClInclude Include="ModelInstancingDemo.h" />
     <ClInclude Include="pch.h" />
-    <ClInclude Include="RenderDemo.h" />
-    <ClInclude Include="SceneDemo.h" />
+    <ClInclude Include="RawBufferDemo.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="AnimInstancingDemo.cpp" />
     <ClCompile Include="CameraScript.cpp" />
-    <ClCompile Include="InstancingDemo.cpp" />
+    <ClCompile Include="GroupDemo.cpp" />
     <ClCompile Include="Main.cpp" />
-    <ClCompile Include="MeshInstancingDemo.cpp" />
-    <ClCompile Include="ModelInstancingDemo.cpp" />
     <ClCompile Include="pch.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
     </ClCompile>
-    <ClCompile Include="RenderDemo.cpp" />
-    <ClCompile Include="SceneDemo.cpp" />
+    <ClCompile Include="RawBufferDemo.cpp" />
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="..\Shaders\00. Global.fx" />
@@ -79,6 +71,8 @@
     <FxCompile Include="..\Shaders\22. ModelInstancingDemo.fx" />
     <FxCompile Include="..\Shaders\23. AnimInstancingDemo.fx" />
     <FxCompile Include="..\Shaders\24. RenderDemo.fx" />
+    <FxCompile Include="..\Shaders\25. RawBufferDemo.fx" />
+    <FxCompile Include="..\Shaders\26. GroupDemo.fx" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>17.0</VCProjectVersion>

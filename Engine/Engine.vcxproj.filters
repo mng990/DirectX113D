@@ -40,6 +40,9 @@
     <Filter Include="98. Utils\ImGui\sources">
       <UniqueIdentifier>{1f3fdc60-2675-4c45-b05d-9634c5da5fc3}</UniqueIdentifier>
     </Filter>
+    <Filter Include="05. ComputeShader">
+      <UniqueIdentifier>{cf9ebf2a-b216-493e-bc9d-bd1ee99f6f0e}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp">
@@ -191,6 +194,9 @@
     </ClCompile>
     <ClCompile Include="SceneManager.cpp">
       <Filter>02. Manager</Filter>
+    </ClCompile>
+    <ClCompile Include="RawBuffer.cpp">
+      <Filter>05. ComputeShader</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -352,6 +358,9 @@
     </ClInclude>
     <ClInclude Include="SceneManager.h">
       <Filter>02. Manager</Filter>
+    </ClInclude>
+    <ClInclude Include="RawBuffer.h">
+      <Filter>05. ComputeShader</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
