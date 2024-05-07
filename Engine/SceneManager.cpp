@@ -3,7 +3,8 @@
 
 void SceneManager::Update()
 {
-	if (_currentScene == nullptr) return;
+	if (_currentScene == nullptr)
+		return;
 
 	_currentScene->Update();
 	_currentScene->LateUpdate();

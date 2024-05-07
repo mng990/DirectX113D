@@ -28,6 +28,9 @@
     <Filter Include="Shaders\Week4">
       <UniqueIdentifier>{f7ed6ef2-17ee-49c7-88a9-489c4e82b0d9}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Game\Week3">
+      <UniqueIdentifier>{4cf64e3a-cd89-4651-8799-1989b032cbe7}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp">
@@ -45,6 +48,21 @@
     <ClCompile Include="GroupDemo.cpp">
       <Filter>Game</Filter>
     </ClCompile>
+    <ClCompile Include="TextureBufferDemo.cpp">
+      <Filter>Game</Filter>
+    </ClCompile>
+    <ClCompile Include="SceneDemo.cpp">
+      <Filter>Game</Filter>
+    </ClCompile>
+    <ClCompile Include="StructuredBufferDemo.cpp">
+      <Filter>Game</Filter>
+    </ClCompile>
+    <ClCompile Include="ViewportDemo.cpp">
+      <Filter>Game</Filter>
+    </ClCompile>
+    <ClCompile Include="CollisionDemo.cpp">
+      <Filter>Game\Week3</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h">
@@ -61,6 +79,21 @@
     </ClInclude>
     <ClInclude Include="GroupDemo.h">
       <Filter>Game</Filter>
+    </ClInclude>
+    <ClInclude Include="TextureBufferDemo.h">
+      <Filter>Game</Filter>
+    </ClInclude>
+    <ClInclude Include="SceneDemo.h">
+      <Filter>Game</Filter>
+    </ClInclude>
+    <ClInclude Include="StructuredBufferDemo.h">
+      <Filter>Game</Filter>
+    </ClInclude>
+    <ClInclude Include="ViewportDemo.h">
+      <Filter>Game</Filter>
+    </ClInclude>
+    <ClInclude Include="CollisionDemo.h">
+      <Filter>Game\Week3</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -149,6 +182,12 @@
       <Filter>Shaders\Week4</Filter>
     </FxCompile>
     <FxCompile Include="..\Shaders\26. GroupDemo.fx">
+      <Filter>Shaders\Week4</Filter>
+    </FxCompile>
+    <FxCompile Include="..\Shaders\27. TextureBufferDemo.fx">
+      <Filter>Shaders\Week4</Filter>
+    </FxCompile>
+    <FxCompile Include="..\Shaders\28. StructureBufferDemo.fx">
       <Filter>Shaders\Week4</Filter>
     </FxCompile>
   </ItemGroup>

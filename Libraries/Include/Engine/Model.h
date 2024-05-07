@@ -9,33 +9,31 @@ class Model : public enable_shared_from_this<Model>
 public:
 	Model();
 	~Model();
+
 public:
 	void ReadMaterial(wstring filename);
 	void ReadModel(wstring filename);
 	void ReadAnimation(wstring filename);
 
-public:
-
-	uint32 GetBoneCount() { return _bones.size(); }
-	vector<shared_ptr<ModelBone>>& GetBones() { return _bones; }
-	shared_ptr<ModelBone> GetBoneByName(const wstring& boneName);
-	shared_ptr<ModelBone> GetBoneByIndex(int32 boneIndex) { return (boneIndex <0 || boneIndex >= _bones.size()) ? nullptr : _bones[boneIndex]; }
-	
-	uint32 GetMaterialCount() { return _materials.size(); }
+	uint32 GetMaterialCount() { return static_cast<uint32>(_materials.size()); }
 	vector<shared_ptr<Material>>& GetMaterials() { return _materials; }
-	shared_ptr<Material> GetMaterialByName(const wstring& materialName);
-	shared_ptr<Material> GetMaterialByIndex(int32 materialIndex) { return _materials[materialIndex]; }
+	shared_ptr<Material> GetMaterialByIndex(uint32 index) { return _materials[index]; }
+	shared_ptr<Material> GetMaterialByName(const wstring& name);
 
-	uint32 GetMeshCount() { return _meshes.size(); }
+	uint32 GetMeshCount() { return static_cast<uint32>(_meshes.size()); }
 	vector<shared_ptr<ModelMesh>>& GetMeshes() { return _meshes; }
-	shared_ptr<ModelMesh> GetMeshByName(const wstring& meshName);
-	shared_ptr<ModelMesh> GetMeshByIndex(int32 meshIndex) { return _meshes[meshIndex]; }
+	shared_ptr<ModelMesh> GetMeshByIndex(uint32 index) { return _meshes[index]; }
+	shared_ptr<ModelMesh> GetMeshByName(const wstring& name);
 
+	uint32 GetBoneCount() { return static_cast<uint32>(_bones.size()); }
+	vector<shared_ptr<ModelBone>>& GetBones() { return _bones; }
+	shared_ptr<ModelBone> GetBoneByIndex(uint32 index) { return (index < 0 || index >= _bones.size() ? nullptr : _bones[index]); }
+	shared_ptr<ModelBone> GetBoneByName(const wstring& name);
 
 	uint32 GetAnimationCount() { return _animations.size(); }
-	vector<shared_ptr<ModelAnimation>>& GetAnimation() { return _animations; }
+	vector<shared_ptr<ModelAnimation>>& GetAnimations() { return _animations; }
+	shared_ptr<ModelAnimation> GetAnimationByIndex(UINT index) { return (index < 0 || index >= _animations.size()) ? nullptr : _animations[index]; }
 	shared_ptr<ModelAnimation> GetAnimationByName(wstring name);
-	shared_ptr<ModelAnimation> GetAnimationByIndex(int32 index) { return (index < 0 || index >= _animations.size()) ? nullptr : _animations[index]; }
 
 private:
 	void BindCacheInfo();

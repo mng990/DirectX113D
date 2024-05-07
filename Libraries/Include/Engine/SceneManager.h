@@ -15,7 +15,8 @@ public:
 		scene->Start();
 	}
 
-	shared_ptr<Scene> GetCurrentScene() { return _currentScene; };
+	shared_ptr<Scene> GetCurrentScene() { return _currentScene; }
+
 private:
 	shared_ptr<Scene> _currentScene = make_shared<Scene>();
 };

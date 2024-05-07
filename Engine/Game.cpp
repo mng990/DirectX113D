@@ -4,7 +4,6 @@
 
 extern IMGUI_IMPL_API LRESULT ImGui_ImplWin32_WndProcHandler(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
 
-
 WPARAM Game::Run(GameDesc& desc)
 {
 	_desc = desc;
@@ -104,7 +103,7 @@ void Game::Update()
 {
 	TIME->Update();
 	INPUT->Update();
-	ShowFPS();
+	ShowFps();
 
 	GRAPHICS->RenderBegin();
 
@@ -118,10 +117,14 @@ void Game::Update()
 	GRAPHICS->RenderEnd();
 }
 
-void Game::ShowFPS()
+void Game::ShowFps()
 {
 	uint32 fps = GET_SINGLE(TimeManager)->GetFps();
+
 	WCHAR text[100] = L"";
 	::wsprintf(text, L"FPS : %d", fps);
+
 	::SetWindowText(_desc.hWnd, text);
+
 }
+

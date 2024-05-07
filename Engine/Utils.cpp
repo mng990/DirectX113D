@@ -22,9 +22,9 @@ bool Utils::StartsWith(wstring str, wstring comp)
 void Utils::Replace(OUT string& str, string comp, string rep)
 {
 	string temp = str;
-	size_t start_pos = 0;
 
-	while ((start_pos = temp.find(comp, start_pos)) != string::npos)
+	size_t start_pos = 0;
+	while ((start_pos = temp.find(comp, start_pos)) != wstring::npos)
 	{
 		temp.replace(start_pos, comp.length(), rep);
 		start_pos += rep.length();
@@ -36,8 +36,8 @@ void Utils::Replace(OUT string& str, string comp, string rep)
 void Utils::Replace(OUT wstring& str, wstring comp, wstring rep)
 {
 	wstring temp = str;
-	size_t start_pos = 0;
 
+	size_t start_pos = 0;
 	while ((start_pos = temp.find(comp, start_pos)) != wstring::npos)
 	{
 		temp.replace(start_pos, comp.length(), rep);

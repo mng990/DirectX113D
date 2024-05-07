@@ -15,13 +15,13 @@ FileUtils::~FileUtils()
 	}
 }
 
+
 void FileUtils::Open(wstring filePath, FileMode mode)
 {
 	if (mode == FileMode::Write)
 	{
-		_handle = ::CreateFile
-		(
-			filePath.c_str(), 
+		_handle = ::CreateFile(
+			filePath.c_str(),
 			GENERIC_WRITE,
 			0,
 			nullptr,
@@ -47,6 +47,7 @@ void FileUtils::Open(wstring filePath, FileMode mode)
 	assert(_handle != INVALID_HANDLE_VALUE);
 }
 
+
 void FileUtils::Write(void* data, uint32 dataSize)
 {
 	uint32 numOfBytes = 0;
@@ -56,13 +57,11 @@ void FileUtils::Write(void* data, uint32 dataSize)
 void FileUtils::Write(const string& data)
 {
 	uint32 size = (uint32)data.size();
-
-	// 문자열 길이를 버퍼에 우선적으로 삽입
 	Write(size);
 
-	if (data.size() == 0) return;
+	if (data.size() == 0)
+		return;
 
-	// 이후 문자열 작성
 	Write((void*)data.data(), size);
 }
 
@@ -75,13 +74,13 @@ void FileUtils::Read(void** data, uint32 dataSize)
 void FileUtils::Read(OUT string& data)
 {
 	uint32 size = Read<uint32>();
-	if (size == 0) return;
+
+	if (size == 0)
+		return;
 
 	char* temp = new char[size + 1];
-
 	temp[size] = 0;
 	Read((void**)&temp, size);
 	data = temp;
-
 	delete[] temp;
 }

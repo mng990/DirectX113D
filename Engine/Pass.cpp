@@ -1,6 +1,5 @@
-#pragma once
 #include "pch.h"
-//#include "Pass.h"
+#include "Pass.h"
 
 void Pass::Draw(UINT vertexCount, UINT startVertexLocation)
 {

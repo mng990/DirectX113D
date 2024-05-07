@@ -1,5 +1,4 @@
 #pragma once
-#include "Geometry.h"
 
 struct ModelBone
 {
@@ -29,6 +28,6 @@ struct ModelMesh
 
 	// Bones
 	int32 boneIndex;
-	shared_ptr<ModelBone> bone; // Cache
+	shared_ptr<ModelBone> bone; // Cache;
 };
 

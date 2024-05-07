@@ -11,14 +11,17 @@ enum class ComponentType : uint8
 	Camera,
 	Animator,
 	Light,
-	// ... 
+	Collider,
+	Terrain,
+	// ...
 	Script,
+
 	End,
 };
 
 enum
 {
-	FIXED_COMPONENT_COUNT = static_cast<uint8>(ComponentType::End) - 1 // 정적 Component Type의 수 (Script 제외)
+	FIXED_COMPONENT_COUNT = static_cast<uint8>(ComponentType::End) - 1
 };
 
 class Component
@@ -26,15 +29,16 @@ class Component
 public:
 	Component(ComponentType type);
 	virtual ~Component();
-	virtual void Awake() {}
-	virtual void Start() {}
 
-	virtual void Update() {}
-	virtual void LateUpdate() {}
-	virtual void FixedUpdate() {}
+	virtual void Awake() { }
+	virtual void Start() { }	
+	virtual void Update() { }
+	virtual void LateUpdate() { }
+	virtual void FixedUpdate() { }
 
 public:
 	ComponentType GetType() { return _type; }
+
 	shared_ptr<GameObject> GetGameObject();
 	shared_ptr<Transform> GetTransform();
 

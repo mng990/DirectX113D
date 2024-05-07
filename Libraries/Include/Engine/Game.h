@@ -3,7 +3,7 @@
 struct GameDesc
 {
 	shared_ptr<class IExecute> app = nullptr;
-	wstring appName = L"DirectX113D";
+	wstring appName = L"GameCoding";
 	HINSTANCE hInstance = 0;
 	HWND hWnd = 0;
 	float width = 800;
@@ -26,8 +26,7 @@ private:
 	BOOL InitInstance(int cmdShow);
 
 	void Update();
-
-	void ShowFPS();
+	void ShowFps();
 
 	static LRESULT CALLBACK WndProc(HWND handle, UINT message, WPARAM wParam, LPARAM lParam);
 	

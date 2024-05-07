@@ -1,5 +1,4 @@
 #pragma once
-#include "pch.h"
 #include "Component.h"
 
 class Transform : public Component
@@ -13,7 +12,7 @@ public:
 	virtual void Update() override;
 
 	void UpdateTransform();
-	
+
 	// Local
 	Vec3 GetLocalScale() { return _localScale; }
 	void SetLocalScale(const Vec3& localScale) { _localScale = localScale; UpdateTransform(); }
@@ -22,22 +21,23 @@ public:
 	Vec3 GetLocalPosition() { return _localPosition; }
 	void SetLocalPosition(const Vec3& localPosition) { _localPosition = localPosition; UpdateTransform(); }
 
-	Vec3 GetRight() { return _matWorld.Right(); }
-	Vec3 GetUp()	{ return _matWorld.Up(); }
-	Vec3 GetLook() { return _matWorld.Backward(); }
-
 	// World
 	Vec3 GetScale() { return _scale; }
-	void SetScale(const Vec3& worldScale);
+	void SetScale(const Vec3& scale);
 	Vec3 GetRotation() { return _rotation; }
-	void SetRotation(const Vec3& worldRotation);
+	void SetRotation(const Vec3& rotation);
 	Vec3 GetPosition() { return _position; }
-	void SetPosition(const Vec3& worldPosition);
+	void SetPosition(const Vec3& position);
+
+	Vec3 GetRight() { return _matWorld.Right(); }
+	Vec3 GetUp() { return _matWorld.Up(); }
+	Vec3 GetLook() { return _matWorld.Backward(); }
 
 	Matrix GetWorldMatrix() { return _matWorld; }
 
 	// 계층 관계
 	bool HasParent() { return _parent != nullptr; }
+	
 	shared_ptr<Transform> GetParent() { return _parent; }
 	void SetParent(shared_ptr<Transform> parent) { _parent = parent; }
 
@@ -45,19 +45,16 @@ public:
 	void AddChild(shared_ptr<Transform> child) { _children.push_back(child); }
 
 private:
-	Vec3 _localPosition = { 0.f, 0.f, 0.f };
+	Vec3 _localScale = { 1.f, 1.f, 1.f }; 
 	Vec3 _localRotation = { 0.f, 0.f, 0.f };
-	Vec3 _localScale = { 1.f, 1.f, 1.f };
+	Vec3 _localPosition = { 0.f, 0.f, 0.f };
 
 	// Cache
 	Matrix _matLocal = Matrix::Identity;
 	Matrix _matWorld = Matrix::Identity;
-
+	
 	Vec3 _scale;
-
-	// rotation을 vec로 관리할 경우 gimbal lock 발생
-	// -> Quaternion 자료형으로 변환해 관리
-	Vec3 _rotation; 
+	Vec3 _rotation;
 	Vec3 _position;
 
 private:

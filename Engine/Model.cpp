@@ -1,13 +1,12 @@
 #include "pch.h"
 #include "Model.h"
-#include "tinyxml2.h"
 #include "Utils.h"
 #include "FileUtils.h"
+#include "tinyxml2.h"
+#include <filesystem>
 #include "Material.h"
 #include "ModelMesh.h"
-#include <filesystem>
 #include "ModelAnimation.h"
-
 
 Model::Model()
 {
@@ -19,47 +18,14 @@ Model::~Model()
 
 }
 
-shared_ptr<ModelBone> Model::GetBoneByName(const wstring& boneName)
-{
-	for (auto bone : _bones)
-	{
-		if (bone->name == boneName)
-			return bone;
-	}
-
-	return nullptr;
-}
-
-shared_ptr<Material> Model::GetMaterialByName(const wstring& materialName)
-{
-	for (auto material : _materials)
-	{
-		if (material->GetName() == materialName)
-			return material;
-	}
-
-	return nullptr;
-}
-
-shared_ptr<ModelMesh> Model::GetMeshByName(const wstring& meshName)
-{
-	for (auto mesh : _meshes)
-	{
-		if (mesh->name == meshName)
-			return mesh;
-	}
-
-	return nullptr;
-}
-
 void Model::ReadMaterial(wstring filename)
 {
 	wstring fullPath = _texturePath + filename + L".xml";
-
 	auto parentPath = filesystem::path(fullPath).parent_path();
+
 	tinyxml2::XMLDocument* document = new tinyxml2::XMLDocument();
-	tinyxml2::XMLError check = document->LoadFile(Utils::ToString(fullPath).c_str());
-	assert(check == tinyxml2::XML_SUCCESS);
+	tinyxml2::XMLError error = document->LoadFile(Utils::ToString(fullPath).c_str());
+	assert(error == tinyxml2::XML_SUCCESS);
 
 	tinyxml2::XMLElement* root = document->FirstChildElement();
 	tinyxml2::XMLElement* materialNode = root->FirstChildElement();
@@ -75,111 +41,98 @@ void Model::ReadMaterial(wstring filename)
 
 		// Diffuse Texture
 		node = node->NextSiblingElement();
-		
-		if (node->GetText()) 
+		if (node->GetText())
 		{
 			wstring textureStr = Utils::ToWString(node->GetText());
-
-			if(textureStr.length() > 0)
+			if (textureStr.length() > 0)
 			{
-				wstring texturePath = (parentPath / textureStr);
-				Utils::Replace(texturePath, Utils::ToWString("\\"), Utils::ToWString("/"));
-				auto texture = RESOURCES->GetOrAddTexture(textureStr, texturePath);
+				auto texture = RESOURCES->GetOrAddTexture(textureStr, (parentPath / textureStr).wstring());
 				material->SetDiffuseMap(texture);
 			}
-			
 		}
 
-		// SpecularTexture
+		// Specular Texture
 		node = node->NextSiblingElement();
-
 		if (node->GetText())
 		{
-			wstring textureStr = Utils::ToWString(node->GetText());
-
-			if (textureStr.length() > 0)
+			wstring texture = Utils::ToWString(node->GetText());
+			if (texture.length() > 0)
 			{
-				wstring texturePath = (parentPath / textureStr);
-				Utils::Replace(texturePath, Utils::ToWString("\\"), Utils::ToWString("/"));
-				auto texture = RESOURCES->GetOrAddTexture(textureStr, texturePath);
-				material->SetSpecularMap(texture);
+				wstring textureStr = Utils::ToWString(node->GetText());
+				if (textureStr.length() > 0)
+				{
+					auto texture = RESOURCES->GetOrAddTexture(textureStr, (parentPath / textureStr).wstring());
+					material->SetSpecularMap(texture);
+				}
 			}
-
 		}
 
-		// NormalTexture
+		// Normal Texture
 		node = node->NextSiblingElement();
-
 		if (node->GetText())
 		{
 			wstring textureStr = Utils::ToWString(node->GetText());
-
 			if (textureStr.length() > 0)
 			{
-				wstring texturePath = (parentPath / textureStr);
-				Utils::Replace(texturePath, Utils::ToWString("\\"), Utils::ToWString("/"));
-				auto texture = RESOURCES->GetOrAddTexture(textureStr, texturePath);
+				auto texture = RESOURCES->GetOrAddTexture(textureStr, (parentPath / textureStr).wstring());
 				material->SetNormalMap(texture);
 			}
-
 		}
 
 		// Ambient
 		{
 			node = node->NextSiblingElement();
-			Color color;
 
+			Color color;
 			color.x = node->FloatAttribute("R");
 			color.y = node->FloatAttribute("G");
 			color.z = node->FloatAttribute("B");
 			color.w = node->FloatAttribute("A");
-
 			material->GetMaterialDesc().ambient = color;
 		}
-		
+
 		// Diffuse
 		{
 			node = node->NextSiblingElement();
-			Color color;
 
+			Color color;
 			color.x = node->FloatAttribute("R");
 			color.y = node->FloatAttribute("G");
 			color.z = node->FloatAttribute("B");
 			color.w = node->FloatAttribute("A");
-
 			material->GetMaterialDesc().diffuse = color;
 		}
 
 		// Specular
 		{
 			node = node->NextSiblingElement();
-			Color color;
 
+			Color color;
 			color.x = node->FloatAttribute("R");
 			color.y = node->FloatAttribute("G");
 			color.z = node->FloatAttribute("B");
 			color.w = node->FloatAttribute("A");
-
 			material->GetMaterialDesc().specular = color;
 		}
 
 		// Emissive
 		{
 			node = node->NextSiblingElement();
-			Color color;
 
+			Color color;
 			color.x = node->FloatAttribute("R");
 			color.y = node->FloatAttribute("G");
 			color.z = node->FloatAttribute("B");
 			color.w = node->FloatAttribute("A");
-
 			material->GetMaterialDesc().emissive = color;
-		}	
-		
+		}
+
 		_materials.push_back(material);
+
+		// Next Material
 		materialNode = materialNode->NextSiblingElement();
 	}
-	
+
 	BindCacheInfo();
 }
 
@@ -207,7 +160,6 @@ void Model::ReadModel(wstring filename)
 	}
 
 	// Mesh
-
 	{
 		const uint32 count = file->Read<uint32>();
 
@@ -217,11 +169,11 @@ void Model::ReadModel(wstring filename)
 
 			mesh->name = Utils::ToWString(file->Read<string>());
 			mesh->boneIndex = file->Read<int32>();
-			
+
 			// Material
 			mesh->materialName = Utils::ToWString(file->Read<string>());
 
-			// VertexData
+			//VertexData
 			{
 				const uint32 count = file->Read<uint32>();
 				vector<ModelVertexType> vertices;
@@ -232,7 +184,7 @@ void Model::ReadModel(wstring filename)
 				mesh->geometry->AddVertices(vertices);
 			}
 
-			// IndexData
+			//IndexData
 			{
 				const uint32 count = file->Read<uint32>();
 
@@ -248,7 +200,6 @@ void Model::ReadModel(wstring filename)
 
 			_meshes.push_back(mesh);
 		}
-
 	}
 
 	BindCacheInfo();
@@ -257,7 +208,7 @@ void Model::ReadModel(wstring filename)
 void Model::ReadAnimation(wstring filename)
 {
 	wstring fullPath = _modelPath + filename + L".clip";
-	
+
 	shared_ptr<FileUtils> file = make_shared<FileUtils>();
 	file->Open(fullPath, FileMode::Read);
 
@@ -274,7 +225,7 @@ void Model::ReadAnimation(wstring filename)
 	{
 		shared_ptr<ModelKeyframe> keyframe = make_shared<ModelKeyframe>();
 		keyframe->boneName = Utils::ToWString(file->Read<string>());
-
+	
 		uint32 size = file->Read<uint32>();
 
 		if (size > 0)
@@ -290,11 +241,44 @@ void Model::ReadAnimation(wstring filename)
 	_animations.push_back(animation);
 }
 
-shared_ptr<ModelAnimation> Model::GetAnimationByName(wstring name)
+std::shared_ptr<Material> Model::GetMaterialByName(const wstring& name)
 {
-	for (auto& animation : _animations) 
+	for (auto& material : _materials)
 	{
-		if (animation->name == name) 
+		if (material->GetName() == name)
+			return material;
+	}
+
+	return nullptr;
+}
+
+std::shared_ptr<ModelMesh> Model::GetMeshByName(const wstring& name)
+{
+	for (auto& mesh : _meshes)
+	{
+		if (mesh->name == name)
+			return mesh;
+	}
+
+	return nullptr;
+}
+
+std::shared_ptr<ModelBone> Model::GetBoneByName(const wstring& name)
+{
+	for (auto& bone : _bones)
+	{
+		if (bone->name == name)
+			return bone;
+	}
+
+	return nullptr;
+}
+
+std::shared_ptr<ModelAnimation> Model::GetAnimationByName(wstring name)
+{
+	for (auto& animation : _animations)
+	{
+		if (animation->name == name)
 			return animation;
 	}
 
@@ -303,20 +287,27 @@ shared_ptr<ModelAnimation> Model::GetAnimationByName(wstring name)
 
 void Model::BindCacheInfo()
 {
+	// Mesh에 Material 캐싱
 	for (const auto& mesh : _meshes)
 	{
-		if (mesh->material != nullptr) continue;
+		// 이미 찾았으면 스킵
+		if (mesh->material != nullptr)
+			continue;
 
 		mesh->material = GetMaterialByName(mesh->materialName);
 	}
 
+	// Mesh에 Bone 캐싱
 	for (const auto& mesh : _meshes)
 	{
-		if (mesh->bone != nullptr) continue;
+		// 이미 찾았으면 스킵
+		if (mesh->bone != nullptr)
+			continue;
 
 		mesh->bone = GetBoneByIndex(mesh->boneIndex);
 	}
 
+	// Bone 계층 정보 채우기
 	if (_root == nullptr && _bones.size() > 0)
 	{
 		_root = _bones[0];

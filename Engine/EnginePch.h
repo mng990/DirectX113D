@@ -37,18 +37,15 @@ using namespace Microsoft::WRL;
 
 #include <FX11/d3dx11effect.h>
 
-
-
 // Assimp
 #include <Assimp/Importer.hpp>
 #include <Assimp/scene.h>
 #include <Assimp/postprocess.h>
 
-// ImGui
+// ImGUI
+#include "imgui.h"
 #include "imgui_impl_dx11.h"
 #include "imgui_impl_win32.h"
-//#include "imgui_internal.h"
-
 
 // Libs
 #pragma comment(lib, "d3d11.lib")
@@ -70,11 +67,9 @@ using namespace Microsoft::WRL;
 #include "InputManager.h"
 #include "TimeManager.h"
 #include "ResourceManager.h"
-#include "RenderManager.h"
 #include "InstancingManager.h"
 #include "ImGuiManager.h"
 #include "SceneManager.h"
-
 
 // Engine
 #include "VertexData.h"
@@ -88,4 +83,3 @@ using namespace Microsoft::WRL;
 #include "Transform.h"
 #include "Texture.h"
 #include "Mesh.h"
-

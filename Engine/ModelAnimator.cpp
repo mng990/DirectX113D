@@ -3,8 +3,9 @@
 #include "Material.h"
 #include "ModelMesh.h"
 #include "Model.h"
-#include "RenderManager.h"
 #include "ModelAnimation.h"
+#include "Camera.h"
+#include "Light.h"
 
 ModelAnimator::ModelAnimator(shared_ptr<Shader> shader)
 	: Super(ComponentType::Animator), _shader(shader)
@@ -19,7 +20,6 @@ ModelAnimator::~ModelAnimator()
 
 }
 
-
 void ModelAnimator::SetModel(shared_ptr<Model> model)
 {
 	_model = model;
@@ -31,15 +31,19 @@ void ModelAnimator::SetModel(shared_ptr<Model> model)
 	}
 }
 
+void ModelAnimator::Update()
+{
+
+}
+
 void ModelAnimator::UpdateTweenData()
 {
 	TweenDesc& desc = _tweenDesc;
-	desc.curr.sumTime += DT;
 
+	desc.curr.sumTime += DT;
 	// 현재 애니메이션
 	{
 		shared_ptr<ModelAnimation> currentAnim = _model->GetAnimationByIndex(desc.curr.animIndex);
-
 		if (currentAnim)
 		{
 			float timePerFrame = 1 / (currentAnim->frameRate * desc.curr.speed);
@@ -54,7 +58,7 @@ void ModelAnimator::UpdateTweenData()
 		}
 	}
 
-	// 다음 애니메이션이 예약되어 있다면
+	// 다음 애니메이션이 예약 되어 있다면
 	if (desc.next.animIndex >= 0)
 	{
 		desc.tweenSumTime += DT;
@@ -69,7 +73,6 @@ void ModelAnimator::UpdateTweenData()
 		else
 		{
 			// 교체중
-
 			shared_ptr<ModelAnimation> nextAnim = _model->GetAnimationByIndex(desc.next.animIndex);
 			desc.next.sumTime += DT;
 
@@ -78,6 +81,7 @@ void ModelAnimator::UpdateTweenData()
 			if (desc.next.ratio >= 1.f)
 			{
 				desc.next.sumTime = 0;
+
 				desc.next.currFrame = (desc.next.currFrame + 1) % nextAnim->frameCount;
 				desc.next.nextFrame = (desc.next.currFrame + 1) % nextAnim->frameCount;
 			}
@@ -85,49 +89,49 @@ void ModelAnimator::UpdateTweenData()
 			desc.next.ratio = desc.next.sumTime / timePerFrame;
 		}
 	}
-
-	// Anim Update
-	//ImGui::InputInt("AnimIndex", &desc.curr.animIndex);
-	desc.curr.animIndex %= _model->GetAnimationCount();
 }
 
-void ModelAnimator::RenderInstancing(shared_ptr<InstancingBuffer>& buffer)
+void ModelAnimator::RenderInstancing(shared_ptr<class InstancingBuffer>& buffer)
 {
 	if (_model == nullptr)
 		return;
+	if (_texture == nullptr)
+		CreateTexture();
 
-	// TODO
-	if (_texture == nullptr) CreateTexture();
+	// GlobalData
+	_shader->PushGlobalData(Camera::S_MatView, Camera::S_MatProjection);
 
-	// SRV를 통해 전달
+	// Light
+	auto lightObj = SCENE->GetCurrentScene()->GetLight();
+	if (lightObj)
+		_shader->PushLightData(lightObj->GetLight()->GetLightDesc());
+
+	// SRV를 통해 정보 전달
 	_shader->GetSRV("TransformMap")->SetResource(_srv.Get());
 
 	// Bones
 	BoneDesc boneDesc;
 
 	const uint32 boneCount = _model->GetBoneCount();
-
-	assert(boneCount <= MAX_MODEL_TRANSFORMS);
-
 	for (uint32 i = 0; i < boneCount; i++)
 	{
 		shared_ptr<ModelBone> bone = _model->GetBoneByIndex(i);
 		boneDesc.transforms[i] = bone->transform;
 	}
-
-	RENDER->PushBoneData(boneDesc);
+	_shader->PushBoneData(boneDesc);
 
 	const auto& meshes = _model->GetMeshes();
-
-	for (auto& mesh : meshes) {
+	for (auto& mesh : meshes)
+	{
 		if (mesh->material)
 			mesh->material->Update();
 
-		//BoneIndex
+		// BoneIndex
 		_shader->GetScalar("BoneIndex")->SetInt(mesh->boneIndex);
 
 		mesh->vertexBuffer->PushData();
 		mesh->indexBuffer->PushData();
+
 		buffer->PushData();
 
 		_shader->DrawIndexedInstanced(0, _pass, mesh->indexBuffer->GetCount(), buffer->GetCount());
@@ -141,10 +145,10 @@ InstanceID ModelAnimator::GetInstanceID()
 
 void ModelAnimator::CreateTexture()
 {
-	if (_model->GetAnimationCount() == 0) return;
+	if (_model->GetAnimationCount() == 0)
+		return;
 
 	_animTransforms.resize(_model->GetAnimationCount());
-
 	for (uint32 i = 0; i < _model->GetAnimationCount(); i++)
 		CreateAnimationTransform(i);
 
@@ -155,20 +159,21 @@ void ModelAnimator::CreateTexture()
 		desc.Width = MAX_MODEL_TRANSFORMS * 4;
 		desc.Height = MAX_MODEL_KEYFRAMES;
 		desc.ArraySize = _model->GetAnimationCount();
-		desc.Format = DXGI_FORMAT_R32G32B32A32_FLOAT;
+		desc.Format = DXGI_FORMAT_R32G32B32A32_FLOAT; // 16바이트
 		desc.Usage = D3D11_USAGE_IMMUTABLE;
 		desc.BindFlags = D3D11_BIND_SHADER_RESOURCE;
 		desc.MipLevels = 1;
 		desc.SampleDesc.Count = 1;
 
-		const uint32 dataSize = MAX_MODEL_TRANSFORMS * sizeof(Matrix); // 1 frame
-		const uint32 pageSize = dataSize * MAX_MODEL_KEYFRAMES; // 1 animation
-		void* mallocPtr = ::malloc(pageSize * _model->GetAnimationCount()); // animations
+		const uint32 dataSize = MAX_MODEL_TRANSFORMS * sizeof(Matrix);
+		const uint32 pageSize = dataSize * MAX_MODEL_KEYFRAMES;
+		void* mallocPtr = ::malloc(pageSize * _model->GetAnimationCount());
 
-
+		// 파편화된 데이터를 조립한다.
 		for (uint32 c = 0; c < _model->GetAnimationCount(); c++)
 		{
 			uint32 startOffset = c * pageSize;
+
 			BYTE* pageStartPtr = reinterpret_cast<BYTE*>(mallocPtr) + startOffset;
 
 			for (uint32 f = 0; f < MAX_MODEL_KEYFRAMES; f++)
@@ -178,6 +183,7 @@ void ModelAnimator::CreateTexture()
 			}
 		}
 
+		// 리소스 만들기
 		vector<D3D11_SUBRESOURCE_DATA> subResources(_model->GetAnimationCount());
 
 		for (uint32 c = 0; c < _model->GetAnimationCount(); c++)
@@ -188,31 +194,28 @@ void ModelAnimator::CreateTexture()
 			subResources[c].SysMemSlicePitch = pageSize;
 		}
 
-
-		// Texture
 		HRESULT hr = DEVICE->CreateTexture2D(&desc, subResources.data(), _texture.GetAddressOf());
 		CHECK(hr);
 
 		::free(mallocPtr);
-
-		// Create SRV
-		{
-			D3D11_SHADER_RESOURCE_VIEW_DESC desc;
-			ZeroMemory(&desc, sizeof(desc));
-			desc.Format = DXGI_FORMAT_R32G32B32A32_FLOAT;
-			desc.ViewDimension = D3D11_SRV_DIMENSION_TEXTURE2DARRAY;
-			desc.Texture2DArray.MipLevels = 1;
-			desc.Texture2DArray.ArraySize = _model->GetAnimationCount();
-
-			HRESULT hr = DEVICE->CreateShaderResourceView(_texture.Get(), &desc, _srv.GetAddressOf());
-			CHECK(hr);
-		}
 	}
-}	
+
+	// Create SRV
+	{
+		D3D11_SHADER_RESOURCE_VIEW_DESC desc;
+		ZeroMemory(&desc, sizeof(desc));
+		desc.Format = DXGI_FORMAT_R32G32B32A32_FLOAT;
+		desc.ViewDimension = D3D11_SRV_DIMENSION_TEXTURE2DARRAY;
+		desc.Texture2DArray.MipLevels = 1;
+		desc.Texture2DArray.ArraySize = _model->GetAnimationCount();
+
+		HRESULT hr = DEVICE->CreateShaderResourceView(_texture.Get(), &desc, _srv.GetAddressOf());
+		CHECK(hr);
+	}
+}
 
 void ModelAnimator::CreateAnimationTransform(uint32 index)
 {
-	// Cache
 	vector<Matrix> tempAnimBoneTransforms(MAX_MODEL_TRANSFORMS, Matrix::Identity);
 
 	shared_ptr<ModelAnimation> animation = _model->GetAnimationByIndex(index);
@@ -223,21 +226,18 @@ void ModelAnimator::CreateAnimationTransform(uint32 index)
 		{
 			shared_ptr<ModelBone> bone = _model->GetBoneByIndex(b);
 
-
 			Matrix matAnimation;
 
 			shared_ptr<ModelKeyframe> frame = animation->GetKeyframe(bone->name);
-			
 			if (frame != nullptr)
 			{
 				ModelKeyframeData& data = frame->transforms[f];
-				
-				Matrix S, R, T;
 
+				Matrix S, R, T;
 				S = Matrix::CreateScale(data.scale.x, data.scale.y, data.scale.z);
 				R = Matrix::CreateFromQuaternion(data.rotation);
 				T = Matrix::CreateTranslation(data.translation.x, data.translation.y, data.translation.z);
-				
+
 				matAnimation = S * R * T;
 			}
 			else
@@ -245,24 +245,19 @@ void ModelAnimator::CreateAnimationTransform(uint32 index)
 				matAnimation = Matrix::Identity;
 			}
 
-			// 애니메이션이 적용되기 전 글로벌 좌표
+			// [ !!!!!!! ]
 			Matrix toRootMatrix = bone->transform;
-
-			// 애니메이션이 적용되기 전 상대좌표로 가는 SRT
 			Matrix invGlobal = toRootMatrix.Invert();
 
 			int32 parentIndex = bone->parentIndex;
 
 			Matrix matParent = Matrix::Identity;
-			
-			// 현재 부모의 글로벌 좌표
 			if (parentIndex >= 0)
-				matParent = tempAnimBoneTransforms[parentIndex]; 
-
-			// 애니메이션이 적용된 글로벌 좌표로 가는 SRT
+				matParent = tempAnimBoneTransforms[parentIndex];
+			
 			tempAnimBoneTransforms[b] = matAnimation * matParent;
 
-			// 애니메이션이 적용된 글로벌 좌표 (스키닝 기준 blend 적용 전)
+			// 결론
 			_animTransforms[index].transforms[f][b] = invGlobal * tempAnimBoneTransforms[b];
 		}
 	}

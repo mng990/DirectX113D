@@ -6,14 +6,15 @@
 #include "ModelRenderer.h"
 #include "MeshRenderer.h"
 #include "Light.h"
+#include "Material.h"
+#include "Model.h"
 #include "SceneDemo.h"
 #include "Scene.h"
 #include "SceneManager.h"
+#include "MonoBehaviour.h"
 
 void SceneDemo::Init()
 {
-	RESOURCES->Init();
-
 	_shader = make_shared<Shader>(L"24. RenderDemo.fx");
 
 	// Camera
@@ -112,18 +113,10 @@ void SceneDemo::Init()
 		CUR_SCENE->Add(obj);
 	}
 
-
-	RENDER->Init(_shader);
 }
 
 void SceneDemo::Update()
 {
-	_camera->Update();
-	RENDER->Update();
-
-	
-
-	INSTANCING->Render(_objs);
 }
 
 void SceneDemo::Render()

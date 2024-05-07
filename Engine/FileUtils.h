@@ -1,6 +1,7 @@
 #pragma once
 
-enum FileMode :uint8 {
+enum FileMode : uint8
+{
 	Write,
 	Read,
 };
@@ -19,7 +20,7 @@ public:
 		DWORD numOfBytes = 0;
 		assert(::WriteFile(_handle, &data, sizeof(T), (LPDWORD)&numOfBytes, nullptr));
 	}
-	
+
 	template<>
 	void Write<string>(const string& data)
 	{
@@ -28,7 +29,6 @@ public:
 
 	void Write(void* data, uint32 dataSize);
 	void Write(const string& data);
-
 
 	template<typename T>
 	void Read(OUT T& data)

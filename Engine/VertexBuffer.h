@@ -12,13 +12,8 @@ public:
 	uint32 GetCount() { return _count; }
 	uint32 GetSlot() { return _slot; }
 
-	void PushData()
-	{
-		DC->IASetVertexBuffers(_slot, 1, _vertexBuffer.GetAddressOf(), &_stride, &_offset);
-	}
-
 	template<typename T>
-	void Create(const vector<T>& vertices, uint32 slot=0, bool cpuWrite = false, bool gpuWrite = false)
+	void Create(const vector<T>& vertices, uint32 slot = 0, bool cpuWrite = false, bool gpuWrite = false)
 	{
 		_stride = sizeof(T);
 		_count = static_cast<uint32>(vertices.size());
@@ -29,7 +24,6 @@ public:
 
 		D3D11_BUFFER_DESC desc;
 		ZeroMemory(&desc, sizeof(desc));
-		desc.Usage = D3D11_USAGE_IMMUTABLE;
 		desc.BindFlags = D3D11_BIND_VERTEX_BUFFER;
 		desc.ByteWidth = (uint32)(_stride * _count);
 
@@ -42,7 +36,7 @@ public:
 			desc.Usage = D3D11_USAGE_DYNAMIC; // CPU Write, GPU Read
 			desc.CPUAccessFlags = D3D10_CPU_ACCESS_WRITE;
 		}
-		else if(cpuWrite == false && gpuWrite == true)
+		else if (cpuWrite == false && gpuWrite == true) // CPU Read, GPU Write
 		{
 			desc.Usage = D3D11_USAGE_DEFAULT;
 		}
@@ -58,6 +52,11 @@ public:
 
 		HRESULT hr = DEVICE->CreateBuffer(&desc, &data, _vertexBuffer.GetAddressOf());
 		CHECK(hr);
+	}
+
+	void PushData()
+	{
+		DC->IASetVertexBuffers(_slot, 1, _vertexBuffer.GetAddressOf(), &_stride, &_offset);
 	}
 
 private:

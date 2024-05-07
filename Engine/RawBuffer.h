@@ -1,18 +1,20 @@
 #pragma once
+
+
 class RawBuffer
 {
-
 public:
-	RawBuffer(void* inputData, int32 inputByte, uint32 outputByte);
+	RawBuffer(void* inputData, uint32 inputByte, uint32 outputByte);
 	~RawBuffer();
 
 public:
 	void CreateBuffer();
-	void CopyToInput(void* data); // CPU -> InputBuffer(GPU)
-	void CopyFromOutput(void* data); // ResultBuffer(GPU) -> CPU
+	void CopyToInput(void* data);
+	void CopyFromOutput(void* data);
 
-	ComPtr<ID3D11UnorderedAccessView> GetUAV();
-	ComPtr<ID3D11ShaderResourceView> GetSRV();
+public:
+	ComPtr<ID3D11ShaderResourceView> GetSRV() { return _srv; }
+	ComPtr<ID3D11UnorderedAccessView> GetUAV() { return _uav; }
 
 private:
 	void CreateInput();
