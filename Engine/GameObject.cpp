@@ -1,3 +1,4 @@
+#include "GameObject.h"
 #include "pch.h"
 #include "GameObject.h"
 #include "MonoBehaviour.h"
@@ -9,6 +10,9 @@
 #include "Light.h"
 #include "BaseCollider.h"
 #include "Terrain.h"
+#include "Button.h"
+#include "Billboard.h"
+#include "SnowBillboard.h"
 
 GameObject::GameObject()
 {
@@ -143,6 +147,24 @@ std::shared_ptr<Terrain> GameObject::GetTerrain()
 {
 	shared_ptr<Component> component = GetFixedComponent(ComponentType::Terrain);
 	return static_pointer_cast<Terrain>(component);
+}
+
+shared_ptr<Button> GameObject::GetButton()
+{
+	shared_ptr<Component> component = GetFixedComponent(ComponentType::Button);
+	return static_pointer_cast<Button>(component);
+}
+
+shared_ptr<Billboard> GameObject::GetBillboard()
+{
+	shared_ptr<Component> component = GetFixedComponent(ComponentType::Billboard);
+	return static_pointer_cast<Billboard>(component);
+}
+
+shared_ptr<SnowBillboard> GameObject::GetSnowBillboard()
+{
+	shared_ptr<Component> component = GetFixedComponent(ComponentType::SnowBillboard);
+	return static_pointer_cast<SnowBillboard>(component);
 }
 
 std::shared_ptr<Transform> GameObject::GetOrAddTransform()

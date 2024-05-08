@@ -15,7 +15,7 @@ struct Line3D
 	Point3D end = Point3D(0.f);
 
 	float Length() { return Vec3::Distance(start, end); }
-	float LengthSq() { return Vec3::DistanceSquared(start, end); }
+	float LengthSq() { return Vec3::DistanceSquared(start, end); } // 제곱근 부하 감소
 };
 
 // *************
@@ -44,6 +44,7 @@ struct Sphere3D
 
 // *************
 // AABB
+// 회전이 되지 않는 박스
 // *************
 
 struct AABB3D
@@ -73,6 +74,7 @@ struct AABB3D
 
 // *****************
 // OBB
+// AABB + rotation(Rotation::Matrix || Quaternion)
 // *****************
 
 struct OBB3D
@@ -81,7 +83,6 @@ struct OBB3D
 	Vec3 size;
 	Matrix orientation;
 	// Vec4 quaternion;
-	// Vec3 rotation;
 };
 
 // *****************
@@ -120,4 +121,8 @@ struct Interval3D
 {
 	float min;
 	float max;
+};
+
+class Primitive3D
+{
 };

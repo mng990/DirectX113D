@@ -119,7 +119,7 @@ Point3D MathUtils::ClosestPoint(const Plane3D& plane, const Point3D& point)
 	return point - plane.normal * distance;
 }
 
-
+// point에서 line에 근접한 점을 구함
 Point3D MathUtils::ClosestPoint(const Line3D& line, const Point3D& point)
 {
 	Vec3 lVec = line.end - line.start; // Line Vector
@@ -129,6 +129,8 @@ Point3D MathUtils::ClosestPoint(const Line3D& line, const Point3D& point)
 	return line.start + lVec * t;
 }
 
+
+// ClosestPoint(line, point)와 point가 동일하면 true 반환
 bool MathUtils::PointOnLine(const Point3D& point, const Line3D& line)
 {
 	Point3D closest = ClosestPoint(line, point);
@@ -160,12 +162,14 @@ Point3D MathUtils::ClosestPoint(const Ray3D& ray, const Point3D& point)
 }
 
 
+
 bool MathUtils::SphereSphere(const Sphere3D& s1, const Sphere3D& s2)
 {
 	float sum = s1.radius + s2.radius;
 	float sqDistance = (s1.position - s2.position).LengthSquared();
 	return sqDistance <= sum * sum;
 }
+
 
 bool MathUtils::SphereAABB(const Sphere3D& sphere, const AABB3D& aabb)
 {
@@ -366,6 +370,8 @@ bool MathUtils::PlanePlane(const Plane3D& plane1, const Plane3D& plane2)
 
 
 
+// Ray casting
+
 bool MathUtils::Raycast(const Sphere3D& sphere, const Ray3D& ray, OUT float& distance)
 {
 	Vec3 e = sphere.position - ray.origin;
@@ -559,4 +565,32 @@ Vec3 MathUtils::ProjectVecOnVec(Vec3 a, Vec3 b)
 	float dist = a.Dot(b);
 
 	return b * dist;
+}
+
+float MathUtils::Random(float r1, float r2)
+{
+	float random = (float)rand() / (float)RAND_MAX;
+	float diff = r2 - r1;
+	float val = random * diff;
+
+	return r1 + val;
+}
+
+Vec2 MathUtils::RandomVec2(float r1, float r2)
+{
+	Vec2 result;
+	result.x = Random(r1,r2);
+	result.y = Random(r1,r2);
+
+	return result;
+}
+
+Vec3 MathUtils::RandomVec3(float r1, float r2)
+{
+	Vec3 result;
+	result.x = Random(r1, r2);
+	result.y = Random(r1, r2);
+	result.z = Random(r1, r2);
+
+	return result;
 }

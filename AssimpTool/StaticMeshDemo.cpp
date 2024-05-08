@@ -5,6 +5,7 @@
 #include "Material.h"
 #include "MeshRenderer.h"
 #include "ModelRenderer.h"
+#include "Model.h"
 
 void StaticMeshDemo::Init()
 {

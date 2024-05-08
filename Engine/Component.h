@@ -13,6 +13,9 @@ enum class ComponentType : uint8
 	Light,
 	Collider,
 	Terrain,
+	Button,
+	Billboard,
+	SnowBillboard,
 	// ...
 	Script,
 

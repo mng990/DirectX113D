@@ -34,11 +34,6 @@ void InstancingManager::RenderMeshRenderer(vector<shared_ptr<GameObject>>& gameO
 	{
 		const vector<shared_ptr<GameObject>>& vec = pair.second;
 
-		//if (vec.size() == 1)
-		//{
-		//	vec[0]->GetMeshRenderer()->RenderSingle();
-		//}
-		//else
 		{
 			const InstanceID instanceId = pair.first;
 
@@ -75,11 +70,6 @@ void InstancingManager::RenderModelRenderer(vector<shared_ptr<GameObject>>& game
 	{
 		const vector<shared_ptr<GameObject>>& vec = pair.second;
 
-		//if (vec.size() == 1)
-		//{
-		//	vec[0]->GetMeshRenderer()->RenderSingle();
-		//}
-		//else
 		{
 			const InstanceID instanceId = pair.first;
 
@@ -117,11 +107,6 @@ void InstancingManager::RenderAnimRenderer(vector<shared_ptr<GameObject>>& gameO
 
 		const vector<shared_ptr<GameObject>>& vec = pair.second;
 
-		//if (vec.size() == 1)
-		//{
-		//	vec[0]->GetModelAnimator()->RenderSingle();
-		//}
-		//else
 		{
 			const InstanceID instanceId = pair.first;
 

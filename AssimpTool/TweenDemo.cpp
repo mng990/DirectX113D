@@ -6,6 +6,8 @@
 #include "MeshRenderer.h"
 #include "ModelRenderer.h"
 #include "ModelAnimator.h"
+#include "Model.h"
+#include "Light.h"
 
 void TweenDemo::Init()
 {
@@ -20,25 +22,22 @@ void TweenDemo::Init()
 	_camera->AddComponent(make_shared<CameraScript>());
 	CreateKachujin();
 
-	RENDER->Init(_shader);
-}
-
-void TweenDemo::Update()
-{
-	_camera->Update();
-	RENDER->Update();
+	CUR_SCENE->Add(_camera);
 
 	{
+		auto light = make_shared<GameObject>();
 		LightDesc lightDesc;
 		lightDesc.ambient = Vec4(0.8f);
 		lightDesc.diffuse = Vec4(1.f);
 		lightDesc.specular = Vec4(1.f);
 		lightDesc.direction = Vec3(1.f, 0.f, 1.f);
-		RENDER->PushLightData(lightDesc);
+		light->GetLight()->SetLightDesc(lightDesc);
+		CUR_SCENE->Add(light);
 	}
-	{
-		_obj->Update();
-	}
+}
+
+void TweenDemo::Update()
+{
 }
 
 void TweenDemo::Render()

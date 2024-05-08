@@ -24,7 +24,7 @@
 #include "Scene.h"
 #include "AABBBoxCollider.h"
 #include "OBBBoxCollider.h"
-//#include "Terrain.h"
+#include "Terrain.h"
 
 void CollisionDemo::Init()
 {
@@ -56,6 +56,7 @@ void CollisionDemo::Init()
 	{
 		shared_ptr<Material> material = make_shared<Material>();
 		material->SetShader(_shader);
+
 		auto texture = RESOURCES->Load<Texture>(L"Kirby", L"..\\Resources\\Textures\\kirby.jpg");
 		material->SetDiffuseMap(texture);
 		MaterialDesc& desc = material->GetMaterialDesc();
@@ -64,30 +65,28 @@ void CollisionDemo::Init()
 		desc.specular = Vec4(1.f);
 		RESOURCES->Add(L"Kirby", material);
 	}
-// 
-// 	// Terrain
-// 	{
-// 		auto obj = make_shared<GameObject>();
-// 		obj->AddComponent(make_shared<Terrain>());
-// 		obj->GetTerrain()->Create(10, 10, RESOURCES->Get<Material>(L"Kirby"));
-// 
-// 		CUR_SCENE->Add(obj);
-// 	}
-	//{
-	//	auto obj = make_shared<GameObject>();
-	//	obj->GetOrAddTransform()->SetLocalPosition(Vec3(0.f));
-	//	obj->AddComponent(make_shared<MeshRenderer>());
-	//	{
-	//		auto mesh = make_shared<Mesh>();
-	//		mesh->CreateGrid(10, 10);
-	//		obj->GetMeshRenderer()->SetMesh(mesh);
-	//		obj->GetMeshRenderer()->SetPass(0);
-	//	}
-	//	{
-	//		obj->GetMeshRenderer()->SetMaterial(RESOURCES->Get<Material>(L"Veigar"));
-	//	}
-	//	CUR_SCENE->Add(obj);
-	//}
+	{
+		shared_ptr<Material> material = make_shared<Material>();
+		material->SetShader(_shader);
+
+		auto texture = RESOURCES->Load<Texture>(L"Grass", L"..\\Resources\\Textures\\Terrain\\grass.jpg");
+		material->SetDiffuseMap(texture);
+		MaterialDesc& desc = material->GetMaterialDesc();
+		desc.ambient = Vec4(1.f);
+		desc.diffuse = Vec4(1.f);
+		desc.specular = Vec4(1.f);
+		RESOURCES->Add(L"Grass", material);
+	}
+
+	// Terrain
+	{
+		auto obj = make_shared<GameObject>();
+		obj->AddComponent(make_shared<Terrain>());
+		obj->GetTerrain()->Create(10, 10, RESOURCES->Get<Material>(L"Grass"));
+	
+		CUR_SCENE->Add(obj);
+	}
+		
 
 	// Mesh
 	{

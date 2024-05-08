@@ -6,10 +6,10 @@ void AssimpTool::Init()
 {
 	{
 		shared_ptr<Converter> converter = make_shared<Converter>();
-		
-		converter->ReadAssetFile(L"Hulkbuster/Hulkbuster.fbx");
-		converter->ExportMaterialData(L"Hulkbuster/Hulkbuster");
-		converter->ExportModelData(L"Hulkbuster/Hulkbuster");
+
+		converter->ReadAssetFile(L"Wolf/WolfAnim.fbx");
+		converter->ExportMaterialData(L"Wolf/WolfAnim");
+		converter->ExportModelData(L"Wolf/WolfAnim");
 	}
 }
 
