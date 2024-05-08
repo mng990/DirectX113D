@@ -46,17 +46,15 @@ Ray Picking으로 사용자 입력에 반응하도록 구현했습니다. <br>
 
 ## 💡 기본 조명
 -----------------
-### Ambient / Diffuse / Specular / Emissive
+### Ambient / Diffuse / Specular
+![lightDemo_1](https://github.com/mng990/DirectX113D/assets/62287856/e0d9e927-7a7b-452d-b360-c4dc04754ced)
+
+### Emissive
+![emissiveDemo](https://github.com/mng990/DirectX113D/assets/62287856/6ec8e0e6-0625-469b-986c-79a0fe461ed4)
 
 ### Normal Mapping
 
 <br></br>
 <br></br>
-
-## 📷 카메라
-----------------
-### Perspective / Orthographic
-
-### Camera Script
 
 
