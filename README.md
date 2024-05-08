@@ -101,7 +101,7 @@ Ray Picking으로 사용자 입력에 반응하도록 구현했습니다. <br>
 -----------------
 ### Ambient / Diffuse / Specular
 <br></br>
-<img src="https://github.com/mng990/DirectX113D/assets/62287856/e0d9e927-7a7b-452d-b360-c4dc04754ced" align="left"></img>
+[](https://github.com/mng990/DirectX113D/assets/62287856/e0d9e927-7a7b-452d-b360-c4dc04754ced)
 <br></br>
 <br></br>
 
@@ -124,7 +124,7 @@ Ray Picking으로 사용자 입력에 반응하도록 구현했습니다. <br>
 
 ### Normal Mapping
 <br></br>
-<img src="https://github.com/mng990/DirectX113D/assets/62287856/0245fead-a49c-4499-b65c-7aab5dc34bf1" align="left"></img>
+![NormalMapping](https://github.com/mng990/DirectX113D/assets/62287856/0245fead-a49c-4499-b65c-7aab5dc34bf1)
 <br></br>
 <br></br>
 
