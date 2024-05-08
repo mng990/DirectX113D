@@ -101,7 +101,7 @@ Ray Picking으로 사용자 입력에 반응하도록 구현했습니다. <br>
 -----------------
 ### Ambient / Diffuse / Specular
 <br></br>
-[](https://github.com/mng990/DirectX113D/assets/62287856/e0d9e927-7a7b-452d-b360-c4dc04754ced)
+![lightDemo_1](https://github.com/mng990/DirectX113D/assets/62287856/817134f8-6b55-4d6c-9ed2-73e99d41984a)
 <br></br>
 <br></br>
 
@@ -112,7 +112,7 @@ Ray Picking으로 사용자 입력에 반응하도록 구현했습니다. <br>
 
 ### Emissive
 <br></br>
-[](https://github.com/mng990/DirectX113D/assets/62287856/6ec8e0e6-0625-469b-986c-79a0fe461ed4)
+![](https://github.com/mng990/DirectX113D/assets/62287856/6ec8e0e6-0625-469b-986c-79a0fe461ed4)
 <br></br>
 <br></br>
 
