@@ -7,9 +7,9 @@ void AssimpTool::Init()
 	{
 		shared_ptr<Converter> converter = make_shared<Converter>();
 
-		converter->ReadAssetFile(L"Wolf/WolfAnim.fbx");
-		converter->ExportMaterialData(L"Wolf/WolfAnim");
-		converter->ExportModelData(L"Wolf/WolfAnim");
+		converter->ReadAssetFile(L"Wolf/Wolf_Anim.fbx");
+		converter->ExportMaterialData(L"Wolf/Wolf_Anim");
+		converter->ExportModelData(L"Wolf/Wolf_Anim");
 	}
 }
 
