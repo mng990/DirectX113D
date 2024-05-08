@@ -88,7 +88,7 @@ Ray Picking으로 사용자 입력에 반응하도록 구현했습니다. <br>
 <br></br>
 <br></br>
 
-## 💡 기본 조명
+## 💡 조명
 -----------------
 ### Ambient / Diffuse / Specular
 ![lightDemo_1](https://github.com/mng990/DirectX113D/assets/62287856/e0d9e927-7a7b-452d-b360-c4dc04754ced)
