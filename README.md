@@ -143,7 +143,8 @@ Specular 효과가 적용되는 문제가 있었습니다.<br></br>
 <br></br>
 
 RGB 정보로 저장된 노말맵을 파싱한 후 <br>
-해당 정보를 Tangent Space에서 World Space로 변환해 <br>
+해당 정보를 Tangent Space에서 World Space로 변환 후 <br>
+쉐이더 파일에서 추가적인 연산을 통해 <br>
 물체의 디테일한 질감을 구현했습니다.
 
 <br></br>
