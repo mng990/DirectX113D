@@ -75,7 +75,7 @@ Sky box를 구현했습니다.<br>
 
 ## 🎯 Collision
 ------------
-### ray picking
+### Ray picking
 <br></br>
 ![](https://github.com/mng990/DirectX113D/assets/62287856/b53b4176-c678-4151-9bd3-988bb9ba6125)
 <br></br>
